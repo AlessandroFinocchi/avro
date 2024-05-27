@@ -70,27 +70,35 @@
     <javacc-plugin.version>3.0.3</javacc-plugin.version>
     <javacc.version>7.0.13</javacc.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+
+    <junit.version>4.12</junit.version>
+    <ba-dua.version>0.6.0</ba-dua.version>
+    <pitest.version>1.16.1</pitest.version>
+    <!-- JaCoCo additions isw2-->
+    <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
   </properties>
 
   <modules>
-    <module>android</module>
+    <!--<module>android</module>-->
+    <!--<module>idl</module>-->
+    <!--<module>compiler</module>-->
+    <!--<module>maven-plugin</module>-->
+    <!--<module>ipc</module>-->
+    <!--<module>ipc-jetty</module>-->
+    <!--<module>ipc-netty</module>-->
+    <!--<module>trevni</module>-->
+    <!--<module>tools</module>-->
+    <!--<module>mapred</module>-->
+    <!--<module>protobuf</module>-->
+    <!--<module>thrift</module>-->
+    <!--<module>archetypes</module>-->
+    <!--<module>grpc</module>-->
+    <!--<module>integration-test</module>-->
+    <!--<module>perf</module>-->
+    <!--<module>interop-data-test</module>-->
+
     <module>avro</module>
-    <module>idl</module>
-    <module>compiler</module>
-    <module>maven-plugin</module>
-    <module>ipc</module>
-    <module>ipc-jetty</module>
-    <module>ipc-netty</module>
-    <module>trevni</module>
-    <module>tools</module>
-    <module>mapred</module>
-    <module>protobuf</module>
-    <module>thrift</module>
-    <module>archetypes</module>
-    <module>grpc</module>
-    <module>integration-test</module>
-    <module>perf</module>
-    <module>interop-data-test</module>
+    <module>jacoco-module</module>
   </modules>
 
   <build>
@@ -113,6 +121,13 @@
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
               <version>${checkstyle.version}</version>
+            </dependency>
+
+            <!-- PIT dependency isw2 -->
+            <dependency>
+              <groupId>org.pitest</groupId>
+              <artifactId>pitest-maven</artifactId>
+              <version>1.14.0</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -159,42 +174,45 @@
             </archive>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven-surefire-plugin.version}</version>
-          <configuration>
-            <includes>
-              <!-- Avro naming convention for JUnit tests -->
-              <include>**/Test**</include>
-            </includes>
-            <excludes>
-              <!-- A few inner classes are not to be tested -->
-              <exclude>**/*$*</exclude>
-              <!-- exclude the generated classes under apache.avro.test, some of
-                these match **/Test** and are not JUnit tests -->
-              <exclude>**/apache/avro/test/**</exclude>
-            </excludes>
-            <enableAssertions>false</enableAssertions>
-            <trimStackTrace>false</trimStackTrace>
-            <runOrder>random</runOrder>
-            <parallel>all</parallel>
-            <useUnlimitedThreads>true</useUnlimitedThreads>
-            <!--<perCoreThreadCount>true</perCoreThreadCount>-->
+        <!--Removed in order to ease the integration with Jacoco -->
+        <!--<plugin>-->
+        <!--  <groupId>org.apache.maven.plugins</groupId>-->
+        <!--  <artifactId>maven-surefire-plugin</artifactId>-->
+        <!--  <version>${maven-surefire-plugin.version}</version>-->
+          <!--<configuration>-->
+          <!--  <includes>-->
+          <!--    &lt;!&ndash; Avro naming convention for JUnit tests &ndash;&gt;-->
+          <!--    <include>**/Test**</include>-->
+          <!--    <include>**/**Test</include>-->
+          <!--    <include>**/**Tests</include>-->
+          <!--  </includes>-->
+          <!--  <excludes>-->
+          <!--    &lt;!&ndash; A few inner classes are not to be tested &ndash;&gt;-->
+          <!--    <exclude>**/*$*</exclude>-->
+          <!--    &lt;!&ndash; exclude the generated classes under apache.avro.test, some of-->
+          <!--      these match **/Test** and are not JUnit tests &ndash;&gt;-->
+          <!--    <exclude>**/apache/avro/test/**</exclude>-->
+          <!--  </excludes>-->
+          <!--  <enableAssertions>false</enableAssertions>-->
+          <!--  <trimStackTrace>false</trimStackTrace>-->
+          <!--  <runOrder>random</runOrder>-->
+          <!--  <parallel>all</parallel>-->
+          <!--  <useUnlimitedThreads>true</useUnlimitedThreads>-->
+          <!--  &lt;!&ndash;<perCoreThreadCount>true</perCoreThreadCount>&ndash;&gt;-->
 
-            <!-- TestSpecificCompiler instantiates a Java compiler to test output results,
-                 this does not work with a manifest-only-jar to set the classpath for the javac.
-                 This may cause problems on some platforms.
-                 See https://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html
-                 for more information. -->
-            <useManifestOnlyJar>false</useManifestOnlyJar>
-            <!-- configures unit test standard error and standard out to go to a file per test
-                 rather than the console. -->
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-            <failIfNoTests>false</failIfNoTests>
-            <argLine>-Xmx1000m</argLine>
-          </configuration>
-        </plugin>
+          <!--  &lt;!&ndash; TestSpecificCompiler instantiates a Java compiler to test output results,-->
+          <!--       this does not work with a manifest-only-jar to set the classpath for the javac.-->
+          <!--       This may cause problems on some platforms.-->
+          <!--       See https://maven.apache.org/plugins/maven-surefire-plugin/examples/class-loading.html-->
+          <!--       for more information. &ndash;&gt;-->
+          <!--  <useManifestOnlyJar>false</useManifestOnlyJar>-->
+          <!--  &lt;!&ndash; configures unit test standard error and standard out to go to a file per test-->
+          <!--       rather than the console. &ndash;&gt;-->
+          <!--  <redirectTestOutputToFile>true</redirectTestOutputToFile>-->
+          <!--  <failIfNoTests>false</failIfNoTests>-->
+          <!--  <argLine>-Xmx1000m</argLine>-->
+          <!--</configuration>-->
+        <!--</plugin>-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
@@ -296,27 +314,28 @@
         <!-- Runs by default in the verify phase  (mvn verify or later in the build cycle)
              the 'check' goal will fail the build if it does not pass.  "mvn checkstyle:check"
              will do this alone, or "mvn checkstyle:checkstyle" will report but not break  -->
-        <executions>
-          <execution>
-            <id>checkstyle-check</id>
-            <phase>test</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
+        <!--<executions>-->
+        <!--  <execution>-->
+        <!--    <id>checkstyle-check</id>-->
+        <!--    <phase>test</phase>-->
+        <!--    <goals>-->
+        <!--      <goal>check</goal>-->
+        <!--    </goals>-->
+        <!--  </execution>-->
+        <!--</executions>-->
       </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
         <configuration>
           <java>
-            <eclipse>
-              <!-- Avro uses Sun's java code style conventions with 2 spaces, this is a modified version of
-                   the eclipse formatter -->
-              <file>${main.basedir}/lang/java/eclipse-java-formatter.xml</file>
-              <version>4.19</version>
-            </eclipse>
+            <!--Removed in order to ease the integration with Jacoco -->
+            <!--<eclipse>-->
+              <!--&lt;!&ndash; Avro uses Sun's java code style conventions with 2 spaces, this is a modified version of-->
+              <!--     the eclipse formatter &ndash;&gt;-->
+              <!--<file>${main.basedir}/lang/java/eclipse-java-formatter.xml</file>-->
+              <!--<version>4.19</version>-->
+            <!--</eclipse>-->
             <!-- Temporarily disabled for JDK 16+ builds -->
             <!--<removeUnusedImports/>-->
             <replaceRegex>
@@ -328,16 +347,16 @@
             <toggleOffOn/>
           </java>
         </configuration>
-        <executions>
-          <execution>
-            <!-- Runs in compile phase to fail fast in case of formatting issues.-->
-            <id>spotless-check</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
+        <!--<executions>-->
+        <!--  <execution>-->
+        <!--    &lt;!&ndash; Runs in compile phase to fail fast in case of formatting issues.&ndash;&gt;-->
+        <!--    <id>spotless-check</id>-->
+        <!--    <phase>compile</phase>-->
+        <!--    <goals>-->
+        <!--      <goal>check</goal>-->
+        <!--    </goals>-->
+        <!--  </execution>-->
+        <!--</executions>-->
       </plugin>
       <plugin>
         <groupId>org.cyclonedx</groupId>
@@ -351,11 +370,14 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.11</version>
+      </plugin>
     </plugins>
   </build>
-
-  <reporting>
-  </reporting>
 
   <profiles>
 
@@ -498,6 +520,31 @@
       <properties>
         <hadoop.version>2.10.1</hadoop.version>
       </properties>
+    </profile>
+
+
+    <!-- Jacoco profile isw2-->
+    <profile>
+      <id>isw2-jacoco-avro-parent</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 

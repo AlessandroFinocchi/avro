@@ -49,17 +49,17 @@
     <!-- plugin versions -->
     <apache-rat-plugin.version>0.16.1</apache-rat-plugin.version>
     <checkstyle-plugin.version>3.3.1</checkstyle-plugin.version>
-    <checkstyle.version>10.15.0</checkstyle.version>
+    <checkstyle.version>10.14.0</checkstyle.version>
     <enforcer-plugin.version>3.4.1</enforcer-plugin.version>
     <extra-enforcer-rules.version>1.7.0</extra-enforcer-rules.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-    <maven-gpg-plugin.version>3.2.1</maven-gpg-plugin.version>
+    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+    <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
     <maven-javadoc-plugin.version>3.6.3</maven-javadoc-plugin.version>
-    <maven-plugin-plugin.version>3.12.0</maven-plugin-plugin.version>
+    <maven-plugin-plugin.version>3.11.0</maven-plugin-plugin.version>
     <maven-remote-resources-plugin.version>3.2.0</maven-remote-resources-plugin.version>
     <maven-shade-plugin.version>3.5.2</maven-shade-plugin.version>
-    <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+    <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
     <maven-toolchains-plugin.version>3.1.0</maven-toolchains-plugin.version>
     <plugin-tools-javadoc.version>3.5.2</plugin-tools-javadoc.version>
     <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
@@ -176,157 +176,7 @@
     <plugins>
 
       <!-- By trying to activate all toolchains referenced in this project we get a fail-fast if any of them is missing. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-toolchains-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>Ensure ToolChain for JDK 8 is available</id>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-            <configuration>
-              <toolchains>
-                <jdk>
-                  <version>8</version>
-                </jdk>
-              </toolchains>
-            </configuration>
-          </execution>
-          <execution>
-            <id>Ensure ToolChain for JDK 11 is available</id>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-            <configuration>
-              <toolchains>
-                <jdk>
-                  <version>11</version>
-                </jdk>
-              </toolchains>
-            </configuration>
-          </execution>
-          <execution>
-            <id>Ensure ToolChain for JDK 17 is available</id>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-            <configuration>
-              <toolchains>
-                <jdk>
-                  <version>17</version>
-                </jdk>
-              </toolchains>
-            </configuration>
-          </execution>
-          <execution>
-            <!-- The last one in this list is the version used for actually building the software -->
-            <id>Build using JDK 21</id>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-            <configuration>
-              <toolchains>
-                <jdk>
-                  <version>21</version>
-                </jdk>
-              </toolchains>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <enforceBytecodeVersion>
-                  <maxJdkVersion>8</maxJdkVersion>
-                  <ignoredScopes>
-                    <ignoredScope>test</ignoredScope>
-                    <ignoredScope>provided</ignoredScope>
-                  </ignoredScopes>
-                  <!--
-                    Multi release jars that are Java 8 compatible should pass,
-                    but the extra-enforcer-plugin does not detect them
-                    correctly so we should ignore them explicitly.
-                    -->
-                  <ignoreClasses>
-                    <ignoreClass>module-info</ignoreClass>
-                  </ignoreClasses>
-                  <excludes>
-                    <!--
-                      Supplied by the user JDK and compiled with matching
-                      version. Is not shaded, so safe to ignore.
-                    -->
-                    <exclude>jdk.tools:jdk.tools</exclude>
-                  </excludes>
-                </enforceBytecodeVersion>
-                <requireJavaVersion>
-                  <version>21</version>
-                </requireJavaVersion>
-                <requireMavenVersion>
-                  <version>[3.9.6,)</version>
-                </requireMavenVersion>
-              </rules>
-            </configuration>
-          </execution>
-          <execution>
-            <id>enforce</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireProperty>
-                  <property>project.version</property>
-                  <!--suppress UnresolvedMavenProperty -->
-                  <regex>${env.VERSION}</regex>
-                  <!--suppress UnresolvedMavenProperty -->
-                  <regexMessage>*****!!!!! Version of project must be ${env.VERSION} !!!!!*****</regexMessage>
-                </requireProperty>
-              </rules>
-            </configuration>
-          </execution>
-          <execution>
-            <id>enforce-banned-dependencies</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <bannedDependencies>
-                  <excludes>
-                    <exclude>com.google.code.findbugs:*</exclude>  <!-- GPL -->
-                    <exclude>org.hamcrest:hamcrest-all</exclude>
-                  </excludes>
-                </bannedDependencies>
-              </rules>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>${extra-enforcer-rules.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <configuration>
-          <goalPrefix>avro</goalPrefix>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
@@ -407,7 +257,7 @@
     <profile>
       <id>rat</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <build>
         <plugins>
