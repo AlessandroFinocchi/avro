@@ -46,7 +46,7 @@
     <osgi.export>org.apache.avro*;version="${project.version}"</osgi.export>
 
     <ba-dua.version>0.6.0</ba-dua.version>
-    <pitest.version>1.14.0</pitest.version>
+    <pitest.version>1.15.0</pitest.version>
   </properties>
 
   <build>
@@ -164,5 +164,49 @@
   </dependencies>
 
   <profiles>
+    <!-- PIT profile -->
+    <profile>
+      <id>isw2-pitest</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <withHistory>true</withHistory>
+        <pitest.history.file>${project.build.directory}/pitest.history</pitest.history.file>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>${pitest.version}</version>
+            <configuration>
+              <targetClasses>
+                <!--<param>org.apache.avro.data.TimeConversions</param>-->
+                <param>org.apache.avro.Schema</param>
+              </targetClasses>
+              <targetTests>
+                <!--<param>org.apache.avro.custom_tests.FirstClassTest</param>-->
+                <param>org.apache.avro.custom_tests.TestSchema</param>
+              </targetTests>
+              <avoidCallsTo>
+                <avoidCallsTo>org.slf4j</avoidCallsTo>
+              </avoidCallsTo>
+              <historyInputFile>${pitest.history.file}</historyInputFile>
+              <historyOutputFile>${pitest.history.file}</historyOutputFile>
+            </configuration>
+            <executions>
+              <execution>
+                <id>PIT Report Generation</id>
+                <!--<phase>test-compile</phase>-->
+                <goals>
+                  <goal>mutationCoverage</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
