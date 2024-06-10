@@ -237,6 +237,19 @@
                   </arguments>
                 </configuration>
               </execution>
+              <execution>
+                <id>Prettify Badua Report</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>/bin/bash</executable>
+                  <arguments>
+                    <argument>${basedir}/ba-dua-align.sh</argument>
+                  </arguments>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
 
@@ -260,12 +273,12 @@
             <version>${pitest.version}</version>
             <configuration>
               <targetClasses>
-                <!--<param>org.apache.avro.data.TimeConversions</param>-->
-                <param>org.apache.avro.Schema</param>
+                <param>org.apache.avro.data.TimeConversions</param>
+                <!--<param>org.apache.avro.Schema</param>-->
               </targetClasses>
               <targetTests>
-                <!--<param>org.apache.avro.custom_tests.FirstClassTest</param>-->
-                <param>org.apache.avro.custom_tests.TestSchema</param>
+                <param>org.apache.avro.custom_tests.FirstClassTest</param>
+                <!--<param>org.apache.avro.custom_tests.TestSchema</param>-->
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>
@@ -286,47 +299,6 @@
         </plugins>
       </build>
     </profile> <!--  pitest  -->
-
-    <profile>
-      <id>isw2-ba-dua-pt2</id>
-      <dependencies>
-        <dependency>
-          <groupId>br.usp.each.saeg</groupId>
-          <artifactId>ba-dua-cli</artifactId>
-          <version>${ba-dua.version}</version>
-        </dependency>
-      </dependencies>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.5.0</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-                <phase>verify</phase>
-                <configuration>
-                  <mainClass>br.usp.each.saeg.badua.cli.Report</mainClass>
-                  <arguments>
-                    <argument>-input</argument>
-                    <argument>${project.build.directory}/badua.ser</argument>
-                    <argument>-classes</argument>
-                    <argument>${project.build.outputDirectory}</argument>
-                    <argument>-show-classes</argument>
-                    <argument>-show-methods</argument>
-                    <argument>-xml</argument>
-                    <argument>${project.build.directory}/badua.xml</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile> <!--ba-dua-pt2-->
 
   </profiles>
 </project>
