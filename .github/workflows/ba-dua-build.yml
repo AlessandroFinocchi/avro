@@ -31,6 +31,10 @@ jobs:
           git checkout d2401f0
           mvn clean install
           cd ..
+      - name: Install XML tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xmlstarlet libxml2-utils
       - name: Build and analyze avro project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
