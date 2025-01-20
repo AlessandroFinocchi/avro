@@ -274,7 +274,7 @@
             <configuration>
               <targetClasses>
                 <param>org.apache.avro.data.TimeConversions</param>
-                <!--<param>org.apache.avro.Schema</param>-->
+                <param>org.apache.avro.Schema</param>
               </targetClasses>
               <targetTests>
                 <param>org.apache.avro.custom_tests.FirstClassTest</param>
