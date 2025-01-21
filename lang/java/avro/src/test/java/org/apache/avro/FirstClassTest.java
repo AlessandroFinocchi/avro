@@ -1,4 +1,4 @@
-package org.apache.avro.custom_tests;
+package org.apache.avro;
 
 import org.apache.avro.LogicalType;
 import org.apache.avro.data.TimeConversions;
