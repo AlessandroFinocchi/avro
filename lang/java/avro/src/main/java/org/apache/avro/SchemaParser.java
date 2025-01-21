@@ -84,7 +84,7 @@ public class SchemaParser {
    *                              available
    * @see UtfTextUtils
    */
-  public ParseResult parse(File file) throws IOException, SchemaParseException {
+  public Schema parse(File file) throws IOException, SchemaParseException {
     return parse(file, null);
   }
 
@@ -99,7 +99,7 @@ public class SchemaParser {
    *                              suppressed underlying parse exceptions if
    *                              available
    */
-  public ParseResult parse(File file, Charset charset) throws IOException, SchemaParseException {
+  public Schema parse(File file, Charset charset) throws IOException, SchemaParseException {
     return parse(file.toPath(), charset);
   }
 
@@ -115,7 +115,7 @@ public class SchemaParser {
    *                              available
    * @see UtfTextUtils
    */
-  public ParseResult parse(Path file) throws IOException, SchemaParseException {
+  public Schema parse(Path file) throws IOException, SchemaParseException {
     return parse(file, null);
   }
 
@@ -130,29 +130,11 @@ public class SchemaParser {
    *                              suppressed underlying parse exceptions if
    *                              available
    */
-  public ParseResult parse(Path file, Charset charset) throws IOException, SchemaParseException {
+  public Schema parse(Path file, Charset charset) throws IOException, SchemaParseException {
     URI inputDir = file.getParent().toUri();
     try (InputStream stream = Files.newInputStream(file)) {
       String formattedSchema = UtfTextUtils.readAllBytes(stream, charset);
       return parse(inputDir, formattedSchema);
-    }
-  }
-
-  /**
-   * Parse an Avro schema from a file written with a specific character set.
-   *
-   * @param location the location of the schema resource
-   * @param charset  the character set of the schema resource
-   * @return the schema
-   * @throws IOException          when the schema cannot be read
-   * @throws SchemaParseException if parsing the schema failed; contains
-   *                              suppressed underlying parse exceptions if
-   *                              available
-   */
-  public ParseResult parse(URI location, Charset charset) throws IOException, SchemaParseException {
-    try (InputStream stream = location.toURL().openStream()) {
-      String formattedSchema = UtfTextUtils.readAllBytes(stream, charset);
-      return parse(location, formattedSchema);
     }
   }
 
@@ -168,7 +150,7 @@ public class SchemaParser {
    *                              available
    * @see UtfTextUtils
    */
-  public ParseResult parse(InputStream in) throws IOException, SchemaParseException {
+  public Schema parse(InputStream in) throws IOException, SchemaParseException {
     return parse(in, null);
   }
 
@@ -184,7 +166,7 @@ public class SchemaParser {
    *                              suppressed underlying parse exceptions if
    *                              available
    */
-  public ParseResult parse(InputStream in, Charset charset) throws IOException, SchemaParseException {
+  public Schema parse(InputStream in, Charset charset) throws IOException, SchemaParseException {
     return parse(UtfTextUtils.readAllBytes(in, charset));
   }
 
@@ -198,7 +180,7 @@ public class SchemaParser {
    *                              suppressed underlying parse exceptions if
    *                              available
    */
-  public ParseResult parse(Reader in) throws IOException, SchemaParseException {
+  public Schema parse(Reader in) throws IOException, SchemaParseException {
     return parse(UtfTextUtils.readAllChars(in));
   }
 
@@ -211,7 +193,7 @@ public class SchemaParser {
    *                              suppressed underlying parse exceptions if
    *                              available
    */
-  public ParseResult parse(CharSequence text) throws SchemaParseException {
+  public Schema parse(CharSequence text) throws SchemaParseException {
     try {
       return parse(null, text);
     } catch (IOException e) {
@@ -238,14 +220,15 @@ public class SchemaParser {
    * @throws RuntimeException     if thrown by one of the parsers
    * @throws SchemaParseException when all parsers fail
    */
-  private ParseResult parse(URI baseUri, CharSequence formattedSchema) throws IOException, SchemaParseException {
+  private Schema parse(URI baseUri, CharSequence formattedSchema) throws IOException, SchemaParseException {
     List<SchemaParseException> parseExceptions = new ArrayList<>();
     for (FormattedSchemaParser formattedSchemaParser : formattedSchemaParsers) {
       try {
         Schema schema = formattedSchemaParser.parse(parseContext, baseUri, formattedSchema);
-        if (parseContext.hasNewSchemas() || schema != null) {
+        if (parseContext.hasNewSchemas()) {
           // Parsing succeeded: return the result.
-          return parseContext.commit(schema);
+          parseContext.commit();
+          return schema;
         }
       } catch (SchemaParseException e) {
         parseContext.rollback();
@@ -262,33 +245,5 @@ public class SchemaParser {
         "Could not parse the schema (the suppressed exceptions tell why).");
     parseExceptions.forEach(parseException::addSuppressed);
     throw parseException;
-  }
-
-  /**
-   * Get all parsed schemata.
-   *
-   * @return all parsed schemas, in the order they were parsed
-   */
-  public List<Schema> getParsedNamedSchemas() {
-    return parseContext.resolveAllSchemas();
-  }
-
-  // Temporary method to reduce PR size
-  @Deprecated
-  public Schema resolve(ParseResult result) {
-    return result.mainSchema();
-  }
-
-  public interface ParseResult {
-    /**
-     * The main schema parsed from a file. Can be any schema, or {@code null} if the
-     * parsed file has no "main" schema.
-     */
-    Schema mainSchema();
-
-    /**
-     * The list of named schemata that were parsed.
-     */
-    List<Schema> parsedNamedSchemas();
   }
 }

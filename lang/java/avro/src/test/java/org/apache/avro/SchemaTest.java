@@ -1,5 +1,7 @@
 package org.apache.avro;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,29 +17,37 @@ public class SchemaTest {
   @Parameterized.Parameters
   public static Collection<Object[]> testData() {
     return Arrays.asList(new Object[][] {
-        { DataType.NULL, null },
-        { DataType.BOOLEAN, null }
+        { DataType.NULL, NameType.NULL, Exception.class },
+        { DataType.BOOLEAN, NameType.NULL, Exception.class }
     });
   }
+  private JsonNode schemaJsonNode;
+  private Schema.Names names;
+  private Schema expectedSchema;
+  private Class<Exception> expectedException;
 
-  private final DataType type;
-  private final Class<Exception> expectedException;
-
-  public SchemaTest(DataType type, Class<Exception> expectedException) {
-    this.type = type;
-    this.expectedException = expectedException;
+  public SchemaTest(DataType dataType, NameType nameType, Class<Exception> expectedException) {
+    try {
+      this.schemaJsonNode = getJsonNode(dataType);
+      this.names = getNames(nameType);
+      this.expectedSchema = getExpectedSchema(dataType, nameType);
+      this.expectedException = expectedException;
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Test
   public void testSchema() {
-    if (expectedException != null) Assert.assertThrows(expectedException, () -> Schema.create(getSchemaType(type)));
+    if (expectedException != null) Assert.assertThrows(expectedException, () -> Schema.parse(this.schemaJsonNode, this.names));
     else{
-      String schemaString = getSchemaString(type);
-      Schema.Parser parser = new Schema.Parser();
-      Schema actualSchema = parser.parse(schemaString);
-      Schema expectedSchema = Schema.create(getSchemaType(type));
+      try {
+        Schema actualSchema = Schema.parse(this.schemaJsonNode, this.names);
 
-      Assert.assertEquals(expectedSchema, actualSchema);
+        Assert.assertEquals(expectedSchema, actualSchema);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 }

@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -335,7 +334,7 @@ public abstract class JsonProperties {
   }
 
   boolean propsEqual(JsonProperties np) {
-    return Objects.equals(props, np.props);
+    return props.equals(np.props);
   }
 
   public boolean hasProps() {

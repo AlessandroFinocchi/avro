@@ -1,9 +1,39 @@
 package org.apache.avro;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.mockito.Mockito;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 public class Utils {
+  public enum NameType {
+    VALID, INVALID, NULL
+  }
+  public static Schema.Names getNames(NameType type) {
+    switch (type) {
+      case VALID: return new Schema.Names("org.apache.avro");
+      //case INVALID: return invalidSchemaNames();
+      case INVALID: return null;
+      case NULL: return null;
+      default: throw new IllegalArgumentException("Unsupported type " + type);
+    }
+  }
+  private static Schema.Names invalidSchemaNames() {
+    Schema.Names names = Mockito.mock(Schema.Names.class);
+    Mockito.when(names.get(any())).thenThrow(new Exception());
+    Mockito.when(names.toString()).thenThrow(new Exception());
+    Mockito.when(names.contains(any())).thenThrow(new Exception());
+    Mockito.when(names.put(any(), any())).thenThrow(new Exception());
+    Mockito.when(names.space()).thenThrow(new Exception());
+    return names;
+  }
+
   public enum DataType {
     RECORD, ENUM, ARRAY, MAP, UNION, FIXED, STRING, BYTES, INT32, LONG64, FLOAT32, FLOAT64, BOOLEAN, NULL
   }
@@ -32,13 +62,40 @@ public class Utils {
   /**
    * Based on <a href="https://avro.apache.org/docs/1.11.1/specification/">Specifications v1.11.1</a>
    */
-  public static String getSchemaString(DataType type) {
+  public static JsonNode getJsonNode(DataType type) throws JsonProcessingException {
+
+    JsonNode jsonNode;
+    ObjectMapper mapper = new ObjectMapper();
+    String str;
+
     switch (type) {
-      case NULL: return "{\"type\":\"null\"}";
+      case NULL:
+        str = "{\"type\":\"null\"}";
+        jsonNode = mapper.readTree(str);
+        break;
 
-      case BOOLEAN: return "{\"type\":\"boolean\"}";
+      case BOOLEAN:
+        str = "{\"type\":\"boolean\"}";
+        jsonNode = mapper.readTree(str);
+        break;
 
-      default: throw new IllegalArgumentException("Unsupported data type: " + type);
+      case INT32:
+        str = "{\"type\":\"int\"}";
+        jsonNode = mapper.readTree(str);
+        break;
+
+      case LONG64:
+        str = "{\"type\":\"long\"}";
+        jsonNode = mapper.readTree(str);
+        break;
+
+      default:
+        throw new IllegalArgumentException("");
     }
+    return jsonNode;
+  }
+
+  public static Schema getExpectedSchema(DataType dataType, NameType type) {
+    return null;
   }
 }
