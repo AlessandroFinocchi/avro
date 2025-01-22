@@ -9,13 +9,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SchemaTest {
 
   private static Stream<Arguments> data() {
     return Stream.of(
         // Varying allocator
-        Arguments.of(Schema.Type.INT, null)
+        Arguments.of(Schema.Type.INT, null),
+        Arguments.of(Schema.Type.LONG, null)
     );
   }
 
