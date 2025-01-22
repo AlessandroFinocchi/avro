@@ -1,30 +1,57 @@
 package org.apache.avro;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.apache.avro.Utils.*;
+
+
 public class SchemaTest {
-  public static Object[][] testData() {
-    return new Object[][] {
-        { Schema.Type.INT,  null },
-        { Schema.Type.LONG, null }
-    };
+  private static class TestSchemaParameters {
+    JsonNode schemaJsonNode;
+    Schema.Names schemaNames;
+    Schema expectedSchema;
+    Class<Exception> expectedException;
+
+    private TestSchemaParameters(DataType dataType, NameType schemaNames, Class<Exception> expectedException) throws JsonProcessingException {
+      this.schemaJsonNode = getJsonNode(dataType);
+      this.schemaNames = getNames(schemaNames);
+      this.expectedSchema = Schema.create(getSchemaType(dataType));
+      this.expectedException = expectedException;
+
+    }
   }
 
-  public SchemaTest() {}
+  private TestSchemaParameters[] testData() {
+    try{
+      return new TestSchemaParameters[] {
+          new TestSchemaParameters(DataType.INT32, NameType.VALID, null),
+          new TestSchemaParameters(DataType.INT32, NameType.NULL, Exception.class)
+      };
+    }
+    catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
 
-  @Test public void testIntSchema() { testSchema(0); }
-  @Test public void testLongSchema() { testSchema(1); }
+  }
+
+  @Test public void testIntValidSchema() { testSchema(0); }
+  @Test public void testIntNullSchema() { testSchema(1); }
 
   private void testSchema(int index) {
-    Schema.Type schemaType = (Schema.Type) testData()[index][0];
-    Class<Exception> expectedException = (Class<Exception>) testData()[index][1];
+    TestSchemaParameters params = testData()[index];
+    JsonNode schemaJsonNode = params.schemaJsonNode;
+    Schema.Names schemaNames = params.schemaNames;
+    Schema expectedSchema = params.expectedSchema;
+    Class<Exception> expectedException = params.expectedException;
 
-    if (expectedException != null) Assert.assertThrows(expectedException, () -> Schema.create(schemaType));
+    if (expectedException != null)
+      Assert.assertThrows(expectedException, () -> Schema.parse(schemaJsonNode, schemaNames));
     else{
       try {
-        Schema actualSchema = Schema.create(schemaType);
-        Schema expectedSchema = Schema.create(schemaType);
+        Schema actualSchema = Schema.parse(schemaJsonNode, schemaNames);
 
         Assert.assertEquals(expectedSchema, actualSchema);
       } catch (Exception e) {

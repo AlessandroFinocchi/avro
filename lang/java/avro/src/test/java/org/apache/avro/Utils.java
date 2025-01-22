@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 
 public class Utils {
   public enum NameType {
@@ -18,8 +17,7 @@ public class Utils {
   public static Schema.Names getNames(NameType type) {
     switch (type) {
       case VALID: return new Schema.Names("org.apache.avro");
-      //case INVALID: return invalidSchemaNames();
-      case INVALID: return null;
+      case INVALID: return invalidSchemaNames();
       case NULL: return null;
       default: throw new IllegalArgumentException("Unsupported type " + type);
     }
@@ -54,7 +52,6 @@ public class Utils {
     dataTypeToTypeMap.put(DataType.BOOLEAN, Schema.Type.BOOLEAN);
     dataTypeToTypeMap.put(DataType.NULL, Schema.Type.NULL);
   }
-
   public static Schema.Type getSchemaType(DataType dataType) {
     return dataTypeToTypeMap.getOrDefault(dataType, null);
   }
