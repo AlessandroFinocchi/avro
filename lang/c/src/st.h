@@ -20,22 +20,26 @@ extern "C" {
 
 #pragma GCC visibility push(hidden)
 
+#ifndef ANYARGS
+ #ifdef __cplusplus
+   #define ANYARGS ...
+ #else
+   #define ANYARGS
+ #endif
+#endif
+
 #ifdef _WIN32
-  typedef int (__cdecl *hash_function_compare)(void*, void*);
-  typedef int (__cdecl *hash_function_hash)(void*);
-  typedef int (__cdecl *hash_function_foreach)(void*, void*, void*);
+  #define HASH_FUNCTION_CAST (int (__cdecl *)(ANYARGS))
 #else
-  typedef int (*hash_function_compare)(void*, void*);
-  typedef int (*hash_function_hash)(void*);
-  typedef int (*hash_function_foreach)(void*, void*, void*);
+  #define HASH_FUNCTION_CAST
 #endif
 
 typedef uintptr_t st_data_t;
 typedef struct st_table st_table;
 
 struct st_hash_type {
-  hash_function_compare compare;
-  hash_function_hash hash;
+  int (*compare) (ANYARGS);
+  int (*hash) (ANYARGS);
 };
 
 struct st_table {
@@ -63,7 +67,7 @@ int st_delete _((st_table *, st_data_t *, st_data_t *));
 int st_delete_safe _((st_table *, st_data_t *, st_data_t *, st_data_t));
 int st_insert _((st_table *, st_data_t, st_data_t));
 int st_lookup _((st_table *, st_data_t, st_data_t *));
-int st_foreach _((st_table *, hash_function_foreach, st_data_t));
+int st_foreach _((st_table *, int (*)(ANYARGS), st_data_t));
 void st_add_direct _((st_table *, st_data_t, st_data_t));
 void st_free_table _((st_table *));
 void st_cleanup_safe _((st_table *, st_data_t));

@@ -363,10 +363,6 @@ template<typename Handler>
 class SimpleParser {
     Decoder *decoder_;
     Handler &handler_;
-    /*
-     * parsingStack always has root at the bottom of it.
-     * So it is safe to call top() on it.
-     */
     std::stack<Symbol> parsingStack;
 
     static void throwMismatch(Symbol::Kind actual, Symbol::Kind expected) {
@@ -746,14 +742,6 @@ public:
             } else if (s.kind() == Symbol::Kind::SkipStart) {
                 parsingStack.pop();
                 skip(*decoder_);
-            } else if (s.kind() == Symbol::Kind::Indirect) {
-                ProductionPtr pp = s.extra<ProductionPtr>();
-                parsingStack.pop();
-                append(pp);
-            } else if (s.kind() == Symbol::Kind::Symbolic) {
-                ProductionPtr pp(s.extra<std::weak_ptr<Production>>());
-                parsingStack.pop();
-                append(pp);
             } else {
                 break;
             }
@@ -768,8 +756,6 @@ public:
         while (parsingStack.size() > 1) {
             parsingStack.pop();
         }
-        Symbol &s = parsingStack.top();
-        append(boost::tuples::get<0>(*s.extrap<RootInfo>()));
     }
 };
 

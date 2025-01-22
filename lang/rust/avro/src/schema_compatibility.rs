@@ -26,28 +26,6 @@ use std::{
     ptr,
 };
 
-fn match_ref_schemas(
-    writers_schema: &Schema,
-    readers_schema: &Schema,
-) -> Result<(), CompatibilityError> {
-    match (readers_schema, writers_schema) {
-        (Schema::Ref { name: r_name }, Schema::Ref { name: w_name }) => {
-            if r_name == w_name {
-                Ok(())
-            } else {
-                Err(CompatibilityError::NameMismatch {
-                    writer_name: w_name.fullname(None),
-                    reader_name: r_name.fullname(None),
-                })
-            }
-        }
-        _ => Err(CompatibilityError::WrongType {
-            writer_schema_type: format!("{:#?}", writers_schema),
-            reader_schema_type: format!("{:#?}", readers_schema),
-        }),
-    }
-}
-
 pub struct SchemaCompatibility;
 
 struct Checker {
@@ -87,7 +65,6 @@ impl Checker {
         if w_type != SchemaKind::Union
             && (r_type.is_primitive()
                 || r_type == SchemaKind::Fixed
-                || r_type == SchemaKind::Uuid
                 || r_type == SchemaKind::Date
                 || r_type == SchemaKind::TimeMillis
                 || r_type == SchemaKind::TimeMicros
@@ -102,7 +79,6 @@ impl Checker {
         }
 
         match r_type {
-            SchemaKind::Ref => match_ref_schemas(writers_schema, readers_schema),
             SchemaKind::Record => self.match_record_schemas(writers_schema, readers_schema),
             SchemaKind::Map => {
                 if let Schema::Map(w_m) = writers_schema {
@@ -424,13 +400,6 @@ impl SchemaCompatibility {
                         }
                     }
                 }
-                SchemaKind::Uuid => {
-                    return check_writer_type(
-                        writers_schema,
-                        readers_schema,
-                        vec![r_type, SchemaKind::String],
-                    );
-                }
                 SchemaKind::Date | SchemaKind::TimeMillis => {
                     return check_writer_type(
                         writers_schema,
@@ -454,7 +423,6 @@ impl SchemaCompatibility {
                 SchemaKind::Duration => {
                     return Ok(());
                 }
-                SchemaKind::Ref => return match_ref_schemas(writers_schema, readers_schema),
                 _ => {
                     return Err(CompatibilityError::Inconclusive(String::from(
                         "readers_schema",
@@ -494,11 +462,8 @@ impl SchemaCompatibility {
             SchemaKind::Float => {
                 check_reader_type_multi(r_type, vec![SchemaKind::Float, SchemaKind::Double], w_type)
             }
-            SchemaKind::String => {
-                check_reader_type_multi(r_type, vec![SchemaKind::Bytes, SchemaKind::Uuid], w_type)
-            }
+            SchemaKind::String => check_reader_type(r_type, SchemaKind::Bytes, w_type),
             SchemaKind::Bytes => check_reader_type(r_type, SchemaKind::String, w_type),
-            SchemaKind::Uuid => check_reader_type(r_type, SchemaKind::String, w_type),
             SchemaKind::Date | SchemaKind::TimeMillis => {
                 check_reader_type(r_type, SchemaKind::Int, w_type)
             }
@@ -873,21 +838,13 @@ mod tests {
     #[case(
         r#"{"type": "string"}"#,
         r#"{"type": "int", "logicalType": "date"}"#,
-        CompatibilityError::TypeExpected{schema_type: String::from("readers_schema"), expected_type: vec![
-            SchemaKind::String,
-            SchemaKind::Bytes,
-            SchemaKind::Uuid,
-        ]}
+        CompatibilityError::TypeExpected{schema_type: String::from("readers_schema"), expected_type: vec![SchemaKind::String, SchemaKind::Bytes]}
     )]
     // time-millis type
     #[case(
         r#"{"type": "string"}"#,
         r#"{"type": "int", "logicalType": "time-millis"}"#,
-        CompatibilityError::TypeExpected{schema_type: String::from("readers_schema"), expected_type: vec![
-            SchemaKind::String,
-            SchemaKind::Bytes,
-            SchemaKind::Uuid,
-        ]}
+        CompatibilityError::TypeExpected{schema_type: String::from("readers_schema"), expected_type: vec![SchemaKind::String, SchemaKind::Bytes]}
     )]
     // time-millis type
     #[case(
@@ -1013,8 +970,6 @@ mod tests {
             (Schema::String, Schema::Bytes),
             (Schema::Bytes, Schema::String),
             // logical types
-            (Schema::Uuid, Schema::Uuid),
-            (Schema::Uuid, Schema::String),
             (Schema::Date, Schema::Int),
             (Schema::TimeMillis, Schema::Int),
             (Schema::TimeMicros, Schema::Long),
@@ -1024,7 +979,6 @@ mod tests {
             (Schema::LocalTimestampMillis, Schema::Long),
             (Schema::LocalTimestampMicros, Schema::Long),
             (Schema::LocalTimestampNanos, Schema::Long),
-            (Schema::String, Schema::Uuid),
             (Schema::Int, Schema::Date),
             (Schema::Int, Schema::TimeMillis),
             (Schema::Long, Schema::TimeMicros),
@@ -1244,7 +1198,7 @@ mod tests {
                 "field1".to_owned(),
                 Box::new(CompatibilityError::TypeExpected {
                     schema_type: "readers_schema".to_owned(),
-                    expected_type: vec![SchemaKind::String, SchemaKind::Bytes, SchemaKind::Uuid]
+                    expected_type: vec![SchemaKind::String, SchemaKind::Bytes]
                 })
             ),
             SchemaCompatibility::can_read(&string_schema, &int_schema).unwrap_err()
@@ -1731,41 +1685,6 @@ mod tests {
                     .to_string()
             );
         }
-
-        Ok(())
-    }
-
-    #[test]
-    fn avro_3974_can_read_schema_references() -> TestResult {
-        let schema_strs = vec![
-            r#"{
-          "type": "record",
-          "name": "Child",
-          "namespace": "avro",
-          "fields": [
-            {
-              "name": "val",
-              "type": "int"
-            }
-          ]
-        }
-        "#,
-            r#"{
-          "type": "record",
-          "name": "Parent",
-          "namespace": "avro",
-          "fields": [
-            {
-              "name": "child",
-              "type": "avro.Child"
-            }
-          ]
-        }
-        "#,
-        ];
-
-        let schemas = Schema::parse_list(&schema_strs).unwrap();
-        SchemaCompatibility::can_read(&schemas[1], &schemas[1])?;
 
         Ok(())
     }
