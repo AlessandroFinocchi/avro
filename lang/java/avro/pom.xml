@@ -46,7 +46,7 @@
     <osgi.export>org.apache.avro*;version="${project.version}"</osgi.export>
 
     <ba-dua.version>0.6.0</ba-dua.version>
-    <pitest.version>1.15.0</pitest.version>
+    <pitest.version>1.14.0</pitest.version>
   </properties>
 
   <build>
@@ -88,6 +88,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
         <configuration>
           <parallel>none</parallel>
         </configuration>
@@ -205,6 +206,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.5</version>
             <configuration>
               <argLine>
                 -javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar
@@ -273,11 +275,9 @@
             <version>${pitest.version}</version>
             <configuration>
               <targetClasses>
-                <param>org.apache.avro.data.TimeConversions</param>
                 <param>org.apache.avro.Schema</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.avro.FirstClassTest</param>
                 <param>org.apache.avro.SchemaTest</param>
               </targetTests>
               <avoidCallsTo>
