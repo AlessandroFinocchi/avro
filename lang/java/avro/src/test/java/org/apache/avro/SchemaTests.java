@@ -8,13 +8,13 @@ import static org.apache.avro.Utils.*;
 
 public class SchemaTests {
 
-  public static class TestParams {
+  static class TestParams {
     JsonNode schemaJsonNode;
     Schema.Names schemaNames;
     Schema expectedSchema;
     Class<Exception> expectedException;
 
-    public TestParams(Utils.DataT dataT, Utils.NameT schemaNames, boolean isExpectedException) {
+    TestParams(DataT dataT, NameT schemaNames, boolean isExpectedException) {
       try {
         this.schemaJsonNode = getJsonNode(dataT);
         this.schemaNames = getNames(schemaNames);

@@ -17,7 +17,6 @@ public class Utils {
   enum NameT {
     VALID, INVALID, NULL
   }
-
   private static final String VALID_SCHEMA_NAME = "org.apache.avro";
 
   static Schema.Names getNames(NameT type) {
@@ -32,7 +31,6 @@ public class Utils {
       throw new IllegalArgumentException("Unsupported type " + type);
     }
   }
-
   private static Schema.Names invalidSchemaNames() {
     Schema.Names names = Mockito.mock(Schema.Names.class);
     Mockito.when(names.get(any())).thenThrow(new Exception());
@@ -47,9 +45,7 @@ public class Utils {
     RECORD, ENUM, ARRAY, MAP, UNION, FIXED, STRING, BYTES, INT32, LONG64, FLOAT32, DOUBLE64, BOOLEAN, NULL,
     NULL_OBJECT
   }
-
   private static final Map<DataT, Schema.Type> dataTypeToTypeMap = new HashMap<>();
-
   static {
     dataTypeToTypeMap.put(DataT.RECORD, Schema.Type.RECORD);
     dataTypeToTypeMap.put(DataT.ENUM, Schema.Type.ENUM);
@@ -66,7 +62,6 @@ public class Utils {
     dataTypeToTypeMap.put(DataT.BOOLEAN, Schema.Type.BOOLEAN);
     dataTypeToTypeMap.put(DataT.NULL, Schema.Type.NULL);
   }
-
   public static Schema.Type getSchemaType(DataT dataT) {
     return dataTypeToTypeMap.getOrDefault(dataT, null);
   }

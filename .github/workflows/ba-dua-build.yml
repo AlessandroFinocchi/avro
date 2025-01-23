@@ -38,7 +38,7 @@ jobs:
       - name: Build and analyze avro project
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: mvn verify -P isw2-ba-dua -f lang/java/avro/
+        run: mvn verify -P isw2-ba-dua -DforkCount=1 -DreuseForks=false -f lang/java/avro/
       - name: Upload XML report
         uses: actions/upload-artifact@v4
         with:

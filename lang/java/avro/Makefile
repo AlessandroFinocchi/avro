@@ -9,7 +9,7 @@ jacoco:
 	mvn verify -P isw2-jacoco-avro-parent -f ../
 
 badua:
-	mvn verify -P isw2-ba-dua
+	mvn verify -P isw2-ba-dua -DforkCount=1 -DreuseForks=false
 
 pitest:
 	mvn verify -P isw2-pitest

@@ -206,12 +206,18 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.2.5</version>
             <configuration>
               <argLine>
                 -javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar
                 -Doutput.file=${project.build.directory}/badua.ser
+                -XX:MaxMetaspaceSize=4096m
+                -XX:MaxHeapSize=4096m
+                -Xmx4096m
+                -XX:+UnlockDiagnosticVMOptions
+                -XX:+UseParallelGC
+                --add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
               </argLine>
+              <parallel>none</parallel>
             </configuration>
           </plugin>
 
@@ -224,7 +230,7 @@
                 <goals>
                   <goal>java</goal>
                 </goals>
-                <phase>verify</phase>
+                <phase>test</phase>
                 <configuration>
                   <mainClass>br.usp.each.saeg.badua.cli.Report</mainClass>
                   <arguments>
