@@ -278,7 +278,7 @@
                 <param>org.apache.avro.Schema</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.avro.SchemaTest</param>
+                <param>org.apache.avro.SchemaValidNamesTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>
