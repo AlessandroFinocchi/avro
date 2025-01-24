@@ -15,15 +15,24 @@ public class SchemaTests {
     Class<Exception> expectedException;
 
     TestParams(DataT dataT, NameT schemaNames, boolean isExpectedException) {
+      this(dataT, DataState.VALID, schemaNames, isExpectedException);
+    }
+
+    TestParams(DataT dataT, DataState dataState, boolean isExpectedException) {
+      this(dataT, dataState, NameT.VALID, isExpectedException);
+    }
+
+    TestParams(DataT dataT, DataState dataState, NameT schemaNames, boolean isExpectedException) {
       try {
-        this.schemaJsonNode = getJsonNode(dataT);
+        this.schemaJsonNode = getJsonNode(dataT, dataState);
         this.schemaNames = getNames(schemaNames);
-        this.expectedSchema = getExpectedSchema(dataT);
+        this.expectedSchema = isExpectedException? null : getExpectedSchema(dataT);
         this.expectedException = isExpectedException ? Exception.class : null;
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
       }
     }
+
   }
 
   static void testSchema(TestParams params) {
