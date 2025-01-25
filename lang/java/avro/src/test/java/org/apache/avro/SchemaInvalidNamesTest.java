@@ -21,4 +21,7 @@ public class SchemaInvalidNamesTest {
   @Test public void testDoubleSchema()    { testSchema(new TestParams(DataT.DOUBLE64, NameT.INVALID, true)); }
   @Test public void testBooleanSchema()   { testSchema(new TestParams(DataT.BOOLEAN,  NameT.INVALID, true)); }
   @Test public void testNullSchema()      { testSchema(new TestParams(DataT.NULL,     NameT.INVALID, true)); }
+
+  // Added after jacoco
+  @Test public void testErrorSchema()     { testSchema(new TestParams(DataT.ERROR,    NameT.INVALID, true)); }
 }

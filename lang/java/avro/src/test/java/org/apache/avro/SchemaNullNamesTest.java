@@ -21,4 +21,7 @@ public class SchemaNullNamesTest {
   @Test public void testDoubleSchema()    { testSchema(new TestParams(DataT.DOUBLE64, NameT.NULL, true)); }
   @Test public void testBooleanSchema()   { testSchema(new TestParams(DataT.BOOLEAN,  NameT.NULL, true)); }
   @Test public void testNullSchema()      { testSchema(new TestParams(DataT.NULL,     NameT.NULL, true)); }
+
+  // Added after jacoco
+  @Test public void testErrorSchema()     { testSchema(new TestParams(DataT.ERROR,    NameT.NULL, true)); }
 }

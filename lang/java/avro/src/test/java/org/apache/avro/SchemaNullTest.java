@@ -22,4 +22,7 @@ public class SchemaNullTest {
   @Test public void testDoubleSchema()    { testSchema(new SchemaTests.TestParams(DataT.DOUBLE64, DataState.NULL, true)); }
   @Test public void testBooleanSchema()   { testSchema(new SchemaTests.TestParams(DataT.BOOLEAN,  DataState.NULL, true)); }
   @Test public void testNullSchema()      { testSchema(new SchemaTests.TestParams(DataT.NULL,     DataState.NULL, true)); }
+
+  // Added after jacoco
+  @Test public void testErrorSchema()     { testSchema(new SchemaTests.TestParams(DataT.ERROR,    DataState.NULL, true)); }
 }

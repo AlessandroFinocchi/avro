@@ -21,4 +21,9 @@ public class SchemaValidNamesTest {
   @Test public void testDoubleSchema()    { testSchema(new TestParams(DataT.DOUBLE64, NameT.VALID, false)); }
   @Test public void testBooleanSchema()   { testSchema(new TestParams(DataT.BOOLEAN,  NameT.VALID, false)); }
   @Test public void testNullSchema()      { testSchema(new TestParams(DataT.NULL,     NameT.VALID, false)); }
+
+  // Added after jacoco
+  @Test public void testErrorSchema()     { testSchema(new TestParams(DataT.ERROR,              NameT.VALID, false)); }
+  @Test public void testDefEnumSchema()   { testSchema(new TestParams(DataT.DEFAULT_VALUE_ENUM, NameT.VALID, false)); }
+  @Test public void testNoTextualSchema() { testSchema(new TestParams(DataT.NON_TEXTUAL,        NameT.VALID, false)); }
 }

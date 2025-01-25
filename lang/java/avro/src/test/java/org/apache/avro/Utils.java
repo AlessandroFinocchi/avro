@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -15,11 +13,11 @@ public class Utils {
   enum NameT {
     VALID, INVALID, NULL
   }
-  private static final String VALID_SCHEMA_NAME = "my.namespace";
+  private static final String VALID_SCHEMA_NAMESPACE = "my.namespace";
   static Schema.Names getNames(NameT type) {
     switch (type) {
     case VALID:
-      return new Schema.Names(VALID_SCHEMA_NAME);
+      return new Schema.Names(VALID_SCHEMA_NAMESPACE);
     case INVALID:
       return new InvalidSchemaNames();
     case NULL:
@@ -30,31 +28,17 @@ public class Utils {
   }
 
   public enum DataT {
-    RECORD, ENUM, ARRAY, MAP, UNION, FIXED, STRING, BYTES, INT32, LONG64, FLOAT32, DOUBLE64, BOOLEAN, NULL
+    RECORD, ENUM, ARRAY, MAP, UNION, FIXED, STRING, BYTES, INT32, LONG64, FLOAT32, DOUBLE64, BOOLEAN, NULL,
+    // Added after jacoco
+    ERROR, NO_FIELD_RECORD, NO_ARRAY_FIELD_RECORD, NO_SYMBOLS_ENUM, NO_ARRAY_SYMBOLS_ENUM,
+    DEFAULT_VALUE_ENUM, NO_ITEMS_ARRAY, NO_VALUES_MAP, NO_SIZE_FIXED, NO_INT_SIZE_FIXED, NON_TEXTUAL
   }
   public enum DataState {
     VALID, WITHOUT_MANDATORY_FIELDS, INVALID_MANDATORY_FIELD, NULL
   }
-  private static final Map<DataT, Schema.Type> dataTypeToTypeMap = new HashMap<>();
-  static {
-    dataTypeToTypeMap.put(DataT.RECORD, Schema.Type.RECORD);
-    dataTypeToTypeMap.put(DataT.ENUM, Schema.Type.ENUM);
-    dataTypeToTypeMap.put(DataT.ARRAY, Schema.Type.ARRAY);
-    dataTypeToTypeMap.put(DataT.MAP, Schema.Type.MAP);
-    dataTypeToTypeMap.put(DataT.UNION, Schema.Type.UNION);
-    dataTypeToTypeMap.put(DataT.FIXED, Schema.Type.FIXED);
-    dataTypeToTypeMap.put(DataT.STRING, Schema.Type.STRING);
-    dataTypeToTypeMap.put(DataT.BYTES, Schema.Type.BYTES);
-    dataTypeToTypeMap.put(DataT.INT32, Schema.Type.INT);
-    dataTypeToTypeMap.put(DataT.LONG64, Schema.Type.LONG);
-    dataTypeToTypeMap.put(DataT.FLOAT32, Schema.Type.FLOAT);
-    dataTypeToTypeMap.put(DataT.DOUBLE64, Schema.Type.DOUBLE);
-    dataTypeToTypeMap.put(DataT.BOOLEAN, Schema.Type.BOOLEAN);
-    dataTypeToTypeMap.put(DataT.NULL, Schema.Type.NULL);
-  }
 
   /**
-   * Based on <a href="https://avro.apache.org/docs/1.11.1/specification/">Specifications v1.11.1</a>
+   * Based on <a href="https://avro.apache.org/docs/1.12.0/specification/">Specifications v1.11.1</a>
    */
   public static JsonNode getJsonNode(DataT type, DataState dataState) throws JsonProcessingException {
 
@@ -81,60 +65,51 @@ public class Utils {
 
     switch (type) {
       case NULL:
-
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "null\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case BOOLEAN:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "boolean\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case INT32:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "int\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case LONG64:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "long\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case FLOAT32:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "float\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case DOUBLE64:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "double\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case STRING:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "string\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case BYTES:
         jsonNodeString = "{" +
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "bytes\"" : "") +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
       case ARRAY:
@@ -142,55 +117,135 @@ public class Utils {
             (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "array\"," : "") +
             "\"items\":\"string\"" +
             "}";
-        jsonNode = mapper.readTree(jsonNodeString);
         break;
 
-    case FIXED:
-      jsonNodeString = "{" +
-          (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "fixed\"," : "") +
-          "\"size\":16," +
-          "\"name\":\"md5\"" +
-          "}";
-      jsonNode = mapper.readTree(jsonNodeString);
-      break;
+      case FIXED:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "fixed\"," : "") +
+            "\"size\":16," +
+            "\"name\":\"md5\"" +
+            "}";
+        break;
 
-    case MAP:
-      jsonNodeString = "{" +
-          (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "map\"," : "") +
-          "\"values\":\"string\"" +
-          "}";
-      jsonNode = mapper.readTree(jsonNodeString);
-      break;
+      case MAP:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "map\"," : "") +
+            "\"values\":\"string\"" +
+            "}";
+        break;
 
-    case ENUM:
-      jsonNodeString = "{" +
-          (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "enum\"," : "") +
-          "\"name\":\"EnumName\"," +
-          "\"doc\":\"This is an enum schema\"," +
-          "\"symbols\":[\"SPRING\",\"SUMMER\",\"AUTUMN\",\"WINTER\"]" +
-          "}";
-      jsonNode = mapper.readTree(jsonNodeString);
-      break;
+      case ENUM:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "enum\"," : "") +
+            "\"name\":\"EnumName\"," +
+            "\"doc\":\"This is an enum schema\"," +
+            "\"symbols\":[\"SPRING\",\"SUMMER\",\"AUTUMN\",\"WINTER\"]" +
+            "}";
+        break;
 
-    case UNION:
-      jsonNodeString = "[" +
-          (isMandatoryFieldPresent ? "\"null\",\"string\"" + unionInvalidField : "") +
-          "]";
-      jsonNode = mapper.readTree(jsonNodeString);
-      break;
+      case UNION:
+        jsonNodeString = "[" +
+            (isMandatoryFieldPresent ? "\"null\",\"string\"" + unionInvalidField : "") +
+            "]";
+        break;
 
-    case RECORD:
-      jsonNodeString = "{" +
-          (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "record\"," : "") +
-          "\"name\":\"RecordName\"," +
-          "\"aliases\":[\"RecordAlias\"]," +
-          "\"fields\":[{\"name\":\"Value\",\"type\":\"string\"}]" +
-          "}";
-      jsonNode = mapper.readTree(jsonNodeString);
-      break;
+      case RECORD:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "record\"," : "") +
+            "\"name\":\"RecordName\"," +
+            "\"aliases\":[\"RecordAlias\"]," +
+            "\"fields\":[{\"name\":\"Value\",\"type\":\"string\"}]" +
+            "}";
+        break;
+
+      case ERROR:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "error\"," : "") +
+            "\"namespace\":\""+ VALID_SCHEMA_NAMESPACE + "\"," +
+            "\"name\":\"ErrorName\"," +
+            "\"aliases\":[\"ErrorAlias\"]," +
+            "\"fields\":[{\"name\":\"Value\",\"type\":\"string\"}]" +
+            "}";
+        break;
+
+      case NO_FIELD_RECORD:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "record\"," : "") +
+            "\"name\":\"RecordName\"," +
+            "\"aliases\":[\"RecordAlias\"]" +
+            "}";
+        break;
+
+      case NO_ARRAY_FIELD_RECORD:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "record\"," : "") +
+            "\"namespace\":\""+ VALID_SCHEMA_NAMESPACE + "\"," +
+            "\"name\":\"RecordName\"," +
+            "\"aliases\":[\"RecordAlias\"]," +
+            "\"fields\":\"NoArrayFields\"" +
+            "}";
+        break;
+
+      case NO_SYMBOLS_ENUM:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "enum\"," : "") +
+            "\"name\":\"EnumName\"," +
+            "\"doc\":\"This is an enum schema\"" +
+            "}";
+        break;
+
+      case NO_ARRAY_SYMBOLS_ENUM:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "enum\"," : "") +
+            "\"name\":\"EnumName\"," +
+            "\"doc\":\"This is an enum schema\"," +
+            "\"symbols\":\"SingleSymbol\"" +
+            "}";
+        break;
+
+      case DEFAULT_VALUE_ENUM:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "enum\"," : "") +
+            "\"name\":\"EnumName\"," +
+            "\"doc\":\"This is an enum schema\"," +
+            "\"symbols\":[\"SPRING\",\"SUMMER\",\"AUTUMN\",\"WINTER\"]," +
+            "\"default\":\"WINTER\"" +
+            "}";
+        break;
+
+      case NO_ITEMS_ARRAY:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "array\"" : "") +
+            "}";
+        break;
+
+      case NO_VALUES_MAP:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "map\"" : "") +
+            "}";
+        break;
+
+      case NO_SIZE_FIXED:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "fixed\"," : "") +
+            "\"name\":\"md5\"" +
+            "}";
+        break;
+
+      case NO_INT_SIZE_FIXED:
+        jsonNodeString = "{" +
+            (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "fixed\"," : "") +
+            "\"size\":\"sixteen\"," +
+            "\"name\":\"md5\"" +
+            "}";
+        break;
+
+      case NON_TEXTUAL:
+        return mapper.valueToTree(42);
 
       default: throw new IllegalArgumentException();
     }
+    jsonNode = mapper.readTree(jsonNodeString);
     return jsonNode;
   }
   public static Schema getExpectedSchema(DataT dataT) {
@@ -217,22 +272,13 @@ public class Utils {
     case DOUBLE64:
       return Schema.create(Schema.Type.DOUBLE);
 
-    case RECORD:
-      Schema nestedSchema = Schema.create(Schema.Type.STRING);
-      Schema.Field recordField = new Schema.Field("Value", nestedSchema, null, null);
-      List<Schema.Field> recordFields = new ArrayList<>();
-      recordFields.add(recordField);
-      expectedSchema = Schema.createRecord("RecordName", null, VALID_SCHEMA_NAME, false, recordFields);
-      expectedSchema.addAlias("RecordAlias");
-      return expectedSchema;
-
     case ENUM:
       List<String> enumValues = new ArrayList<>();
       enumValues.add("SPRING");
       enumValues.add("SUMMER");
       enumValues.add("AUTUMN");
       enumValues.add("WINTER");
-      expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAME, enumValues);
+      expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, enumValues);
       return expectedSchema;
 
     case ARRAY:
@@ -255,8 +301,46 @@ public class Utils {
       return expectedSchema;
 
     case FIXED:
-      expectedSchema = Schema.createFixed("md5", null, VALID_SCHEMA_NAME, 16);
+      expectedSchema = Schema.createFixed("md5", null, VALID_SCHEMA_NAMESPACE, 16);
       return expectedSchema;
+
+    case RECORD:
+      Schema nestedRecordSchema = Schema.create(Schema.Type.STRING);
+      Schema.Field recordField = new Schema.Field("Value", nestedRecordSchema, null, null);
+      List<Schema.Field> recordFields = new ArrayList<>();
+      recordFields.add(recordField);
+      expectedSchema = Schema.createRecord("RecordName", null, VALID_SCHEMA_NAMESPACE, false, recordFields);
+      expectedSchema.addAlias("RecordAlias");
+      return expectedSchema;
+
+    case ERROR:
+      Schema nestedErrorSchema = Schema.create(Schema.Type.STRING);
+      Schema.Field errorField = new Schema.Field("Value", nestedErrorSchema, null, null);
+      List<Schema.Field> errorFields = new ArrayList<>();
+      errorFields.add(errorField);
+      expectedSchema = Schema.createRecord("ErrorName", null, VALID_SCHEMA_NAMESPACE, false, errorFields);
+      expectedSchema.addAlias("ErrorName");
+      return expectedSchema;
+
+    case DEFAULT_VALUE_ENUM:
+      List<String> defEnumValues = new ArrayList<>();
+      defEnumValues.add("SPRING");
+      defEnumValues.add("SUMMER");
+      defEnumValues.add("AUTUMN");
+      defEnumValues.add("WINTER");
+      expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, defEnumValues, "WINTER");
+      return expectedSchema;
+
+    case NO_FIELD_RECORD: // It's invalid, it cannot be created
+    case NO_ARRAY_FIELD_RECORD:
+    case NO_SYMBOLS_ENUM:
+    case NO_ARRAY_SYMBOLS_ENUM:
+    case NO_ITEMS_ARRAY:
+    case NO_VALUES_MAP:
+    case NO_SIZE_FIXED:
+    case NO_INT_SIZE_FIXED:
+    case NON_TEXTUAL:
+      return null;
 
     case NULL:
       return Schema.create(Schema.Type.NULL);

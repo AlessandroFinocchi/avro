@@ -6,7 +6,7 @@ import static org.apache.avro.SchemaTests.testSchema;
 import static org.apache.avro.Utils.DataState;
 import static org.apache.avro.Utils.DataT;
 
-public class SchemainvalidFieldTest {
+public class SchemaInvalidFieldTest {
 
   @Test public void testRecordSchema()    { testSchema(new SchemaTests.TestParams(DataT.RECORD,   DataState.INVALID_MANDATORY_FIELD, true)); }
   @Test public void testEnumSchema()      { testSchema(new SchemaTests.TestParams(DataT.ENUM,     DataState.INVALID_MANDATORY_FIELD, true)); }
@@ -22,4 +22,10 @@ public class SchemainvalidFieldTest {
   @Test public void testDoubleSchema()    { testSchema(new SchemaTests.TestParams(DataT.DOUBLE64, DataState.INVALID_MANDATORY_FIELD, true)); }
   @Test public void testBooleanSchema()   { testSchema(new SchemaTests.TestParams(DataT.BOOLEAN,  DataState.INVALID_MANDATORY_FIELD, true)); }
   @Test public void testNullSchema()      { testSchema(new SchemaTests.TestParams(DataT.NULL,     DataState.INVALID_MANDATORY_FIELD, true)); }
+
+  // Added after jacoco
+  @Test public void testErrorSchema()              { testSchema(new SchemaTests.TestParams(DataT.ERROR,      DataState.INVALID_MANDATORY_FIELD, true)); }
+  @Test public void testNoArrayFieldRecordSchema() { testSchema(new SchemaTests.TestParams(DataT.NO_ARRAY_FIELD_RECORD, Utils.NameT.VALID, true)); }
+  @Test public void testNoArraySymbolsEnumSchema() { testSchema(new SchemaTests.TestParams(DataT.NO_ARRAY_SYMBOLS_ENUM, Utils.NameT.VALID, true)); }
+  @Test public void testNoIntSizeFixedSchema()     { testSchema(new SchemaTests.TestParams(DataT.NO_INT_SIZE_FIXED,     Utils.NameT.VALID, true)); }
 }
