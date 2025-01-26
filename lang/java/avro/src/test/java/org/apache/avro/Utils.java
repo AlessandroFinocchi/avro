@@ -10,11 +10,11 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 
 public class Utils {
-  enum NameT {
+  public enum NameT {
     VALID, INVALID, NULL
   }
-  private static final String VALID_SCHEMA_NAMESPACE = "my.namespace";
-  static Schema.Names getNames(NameT type) {
+  public static final String VALID_SCHEMA_NAMESPACE = "my.namespace";
+  public static Schema.Names getNames(NameT type) {
     switch (type) {
     case VALID:
       return new Schema.Names(VALID_SCHEMA_NAMESPACE);
@@ -31,7 +31,7 @@ public class Utils {
     RECORD, ENUM, ARRAY, MAP, UNION, FIXED, STRING, BYTES, INT32, LONG64, FLOAT32, DOUBLE64, BOOLEAN, NULL,
     // Added after jacoco
     ERROR, NO_FIELD_RECORD, NO_ARRAY_FIELD_RECORD, NO_SYMBOLS_ENUM, NO_ARRAY_SYMBOLS_ENUM,
-    DEFAULT_VALUE_ENUM, NO_ITEMS_ARRAY, NO_VALUES_MAP, NO_SIZE_FIXED, NO_INT_SIZE_FIXED, NON_TEXTUAL
+    DEFAULT_VALUE_ENUM, NO_ITEMS_ARRAY, NO_VALUES_MAP, NO_SIZE_FIXED, NO_INT_SIZE_FIXED, NON_TEXTUAL,
   }
   public enum DataState {
     VALID, WITHOUT_MANDATORY_FIELDS, INVALID_MANDATORY_FIELD, NULL
@@ -345,6 +345,7 @@ public class Utils {
     case NULL:
       return Schema.create(Schema.Type.NULL);
     }
+
     throw new IllegalArgumentException();
   }
 }

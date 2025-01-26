@@ -206,18 +206,33 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M5</version>
             <configuration>
               <argLine>
                 -javaagent:target/dependency/ba-dua-agent-rt-${ba-dua.version}-all.jar
                 -Doutput.file=${project.build.directory}/badua.ser
-                -XX:MaxMetaspaceSize=4096m
-                -XX:MaxHeapSize=4096m
-                -Xmx4096m
-                -XX:+UnlockDiagnosticVMOptions
-                -XX:+UseParallelGC
-                --add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
+                <!-- -XX:MaxMetaspaceSize=1024m-->
+                <!-- -XX:MaxHeapSize=1024m-->
+                <!-- -Xmx1024m-->
+                <!-- -XX:+UnlockDiagnosticVMOptions-->
+                <!-- -XX:+UseParallelGC-->
+                <!--&#45;&#45;add-opens java.base/jdk.internal.reflect=ALL-UNNAMED-->
+                <!--&#45;&#45;add-opens java.base/java.lang=ALL-UNNAMED-->
+                <!--&#45;&#45;add-opens java.base/java.lang.reflect=ALL-UNNAMED-->
+                <!--&#45;&#45;add-opens java.base/sun.reflect=ALL-UNNAMED-->
+                <!--&#45;&#45;illegal-access=permit-->
               </argLine>
               <parallel>none</parallel>
+              <useSystemClassLoader>false</useSystemClassLoader>
+              <includes>
+                <!--<include>**/SchemaValidNamesTest.java</include>-->
+                <!--<include>**/SchemaInvalidNamesTest.java</include>-->
+                <!--<include>**/SchemaNullNamesTest.java</include>-->
+                <!--<include>**/SchemaWOFieldTest.java</include>-->
+                <!--<include>**/SchemaInvalidFieldTest.java</include>-->
+                <!--<include>**/SchemaNullTest.java</include>-->
+                <include>**/SchemaCoverageTest.java</include>
+              </includes>
             </configuration>
           </plugin>
 
