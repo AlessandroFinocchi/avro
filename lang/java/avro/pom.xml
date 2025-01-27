@@ -222,17 +222,17 @@
                 <!--&#45;&#45;add-opens java.base/sun.reflect=ALL-UNNAMED-->
                 <!--&#45;&#45;illegal-access=permit-->
               </argLine>
-              <parallel>none</parallel>
-              <useSystemClassLoader>false</useSystemClassLoader>
-              <includes>
-                <!--<include>**/SchemaValidNamesTest.java</include>-->
-                <!--<include>**/SchemaInvalidNamesTest.java</include>-->
-                <!--<include>**/SchemaNullNamesTest.java</include>-->
-                <!--<include>**/SchemaWOFieldTest.java</include>-->
-                <!--<include>**/SchemaInvalidFieldTest.java</include>-->
-                <!--<include>**/SchemaNullTest.java</include>-->
-                <include>**/SchemaCoverageTest.java</include>
-              </includes>
+              <!--<parallel>none</parallel>-->
+              <!--<useSystemClassLoader>false</useSystemClassLoader>-->
+              <!--<includes>-->
+              <!--  <include>**/SchemaValidNamesTest.java</include>-->
+              <!--  <include>**/SchemaInvalidNamesTest.java</include>-->
+              <!--  <include>**/SchemaNullNamesTest.java</include>-->
+              <!--  <include>**/SchemaWOFieldTest.java</include>-->
+              <!--  <include>**/SchemaInvalidFieldTest.java</include>-->
+              <!--  <include>**/SchemaNullTest.java</include>-->
+              <!--  <include>**/SchemaCoverageTest.java</include>-->
+              <!--</includes>-->
             </configuration>
           </plugin>
 
