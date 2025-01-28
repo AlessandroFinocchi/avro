@@ -224,15 +224,6 @@
               </argLine>
               <!--<parallel>none</parallel>-->
               <!--<useSystemClassLoader>false</useSystemClassLoader>-->
-              <!--<includes>-->
-              <!--  <include>**/SchemaValidNamesTest.java</include>-->
-              <!--  <include>**/SchemaInvalidNamesTest.java</include>-->
-              <!--  <include>**/SchemaNullNamesTest.java</include>-->
-              <!--  <include>**/SchemaWOFieldTest.java</include>-->
-              <!--  <include>**/SchemaInvalidFieldTest.java</include>-->
-              <!--  <include>**/SchemaNullTest.java</include>-->
-              <!--  <include>**/SchemaCoverageTest.java</include>-->
-              <!--</includes>-->
             </configuration>
           </plugin>
 
@@ -300,6 +291,12 @@
               </targetClasses>
               <targetTests>
                 <param>org.apache.avro.SchemaValidNamesTest</param>
+                <param>org.apache.avro.SchemaInvalidNamesTest</param>
+                <param>org.apache.avro.SchemaNullNamesTest</param>
+                <param>org.apache.avro.SchemaWOFieldTest</param>
+                <param>org.apache.avro.SchemaInvalidFieldTest</param>
+                <param>org.apache.avro.SchemaNullTest</param>
+                <param>org.apache.avro.SchemaUpgradedTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>

@@ -32,6 +32,8 @@ public class Utils {
     // Added after jacoco
     ERROR, NO_FIELD_RECORD, NO_ARRAY_FIELD_RECORD, NO_SYMBOLS_ENUM, NO_ARRAY_SYMBOLS_ENUM,
     DEFAULT_VALUE_ENUM, NO_ITEMS_ARRAY, NO_VALUES_MAP, NO_SIZE_FIXED, NO_INT_SIZE_FIXED, NON_TEXTUAL,
+    // Added after PIT
+    LOGICAL_TYPE_DATE,
   }
   public enum DataState {
     VALID, WITHOUT_MANDATORY_FIELDS, INVALID_MANDATORY_FIELD, NULL
@@ -243,6 +245,13 @@ public class Utils {
       case NON_TEXTUAL:
         return mapper.valueToTree(42);
 
+    case LOGICAL_TYPE_DATE:
+      jsonNodeString = "{" +
+          (isMandatoryFieldPresent ? "\"type\":\"" + mandatoryFieldAppendingValue + "int\"," : "") +
+          "\"logicalType\": \"date\"" +
+          "}";
+      break;
+
       default: throw new IllegalArgumentException();
     }
     jsonNode = mapper.readTree(jsonNodeString);
@@ -344,8 +353,12 @@ public class Utils {
 
     case NULL:
       return Schema.create(Schema.Type.NULL);
-    }
 
+    case LOGICAL_TYPE_DATE:
+      expectedSchema = Schema.create(Schema.Type.INT);
+      expectedSchema.addProp("logicalType", "date");
+      return expectedSchema;
+    }
     throw new IllegalArgumentException();
   }
 }

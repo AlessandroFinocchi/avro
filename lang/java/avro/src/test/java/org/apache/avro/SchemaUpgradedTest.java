@@ -11,12 +11,12 @@ import static org.apache.avro.Utils.*;
 import static org.apache.avro.SchemaTests.*;
 
 @RunWith(Parameterized.class)
-public class SchemaCoverageTest {
+public class SchemaUpgradedTest {
 
   @Parameterized.Parameters
   public static Collection<TestParams> getParameters() {
     return Arrays.asList(
-        //Added after jacoco
+        // Added after jacoco
 
         // Valid
         new TestParams(DataT.DEFAULT_VALUE_ENUM, NameT.VALID, false),
@@ -33,13 +33,16 @@ public class SchemaCoverageTest {
         new TestParams(DataT.ERROR, DataState.WITHOUT_MANDATORY_FIELDS, true),
         new TestParams(DataT.NO_ARRAY_FIELD_RECORD, NameT.VALID, true),
         new TestParams(DataT.NO_ARRAY_SYMBOLS_ENUM, NameT.VALID, true),
-        new TestParams(DataT.NO_INT_SIZE_FIXED, NameT.VALID, true)
+        new TestParams(DataT.NO_INT_SIZE_FIXED, NameT.VALID, true),
+
+        // Added after PIT
+        new TestParams(DataT.LOGICAL_TYPE_DATE, NameT.VALID, false)
     );
   }
 
   private final TestParams params;
 
-  public SchemaCoverageTest(TestParams params) {
+  public SchemaUpgradedTest(TestParams params) {
     this.params = params;
   }
 
