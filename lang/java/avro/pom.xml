@@ -119,6 +119,14 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>15</source>
+          <target>15</target>
+        </configuration>
+      </plugin>
 
     </plugins>
   </build>
@@ -162,6 +170,39 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <!-- PowerMock core -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-core</artifactId>
+      <version>2.0.9</version> <!-- Use the latest compatible version -->
+      <scope>test</scope>
+    </dependency>
+
+    <!-- PowerMock Mockito integration -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito2</artifactId>
+      <version>2.0.9</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- PowerMock JUnit 4 integration -->
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>2.0.9</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Optional: JUnit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <profiles>
@@ -224,6 +265,9 @@
               </argLine>
               <!--<parallel>none</parallel>-->
               <!--<useSystemClassLoader>false</useSystemClassLoader>-->
+              <excludes>
+                <exclude>**/SchemaPowermockTest.java</exclude>
+              </excludes>
             </configuration>
           </plugin>
 
@@ -297,6 +341,7 @@
                 <param>org.apache.avro.SchemaInvalidFieldTest</param>
                 <param>org.apache.avro.SchemaNullTest</param>
                 <param>org.apache.avro.SchemaUpgradedTest</param>
+                <param>org.apache.avro.SchemaPowermockTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>
