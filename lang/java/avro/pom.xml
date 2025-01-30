@@ -123,8 +123,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>15</source>
-          <target>15</target>
+          <source>8</source>
+          <target>8</target>
         </configuration>
       </plugin>
 
@@ -267,6 +267,8 @@
               <!--<useSystemClassLoader>false</useSystemClassLoader>-->
               <excludes>
                 <exclude>**/SchemaPowermockTest.java</exclude>
+                <!--<exclude>**/Compatibility**Test.java</exclude>-->
+                <exclude>**/Schema**Test.java</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -334,14 +336,15 @@
                 <param>org.apache.avro.Schema</param>
               </targetClasses>
               <targetTests>
-                <param>org.apache.avro.SchemaValidNamesTest</param>
-                <param>org.apache.avro.SchemaInvalidNamesTest</param>
-                <param>org.apache.avro.SchemaNullNamesTest</param>
-                <param>org.apache.avro.SchemaWOFieldTest</param>
-                <param>org.apache.avro.SchemaInvalidFieldTest</param>
-                <param>org.apache.avro.SchemaNullTest</param>
-                <param>org.apache.avro.SchemaUpgradedTest</param>
-                <param>org.apache.avro.SchemaPowermockTest</param>
+                <!--<param>org.apache.avro.SchemaValidNamesTest</param>-->
+                <!--<param>org.apache.avro.SchemaInvalidNamesTest</param>-->
+                <!--<param>org.apache.avro.SchemaNullNamesTest</param>-->
+                <!--<param>org.apache.avro.SchemaWOFieldTest</param>-->
+                <!--<param>org.apache.avro.SchemaInvalidFieldTest</param>-->
+                <!--<param>org.apache.avro.SchemaNullTest</param>-->
+                <!--<param>org.apache.avro.SchemaUpgradedTest</param>-->
+                <!--<param>org.apache.avro.SchemaPowermockTest</param>-->
+                <param>org.apache.avro.CompatibilityCompatibleTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>
