@@ -14,31 +14,31 @@ import static org.apache.avro.SchemaTests.*;
 public class SchemaValidNamesTest {
 
   @Parameterized.Parameters
-  public static Collection<TestParams> getParameters() {
+  public static Collection<TestSchemaParams> getParameters() {
     return Arrays.asList(
-        new TestParams(DataT.RECORD, NameT.VALID, false),
-        new TestParams(DataT.ENUM, NameT.VALID, false),
-        new TestParams(DataT.ARRAY, NameT.VALID, false),
-        new TestParams(DataT.MAP, NameT.VALID, false),
-        new TestParams(DataT.UNION, NameT.VALID, false),
-        new TestParams(DataT.FIXED, NameT.VALID, false),
-        new TestParams(DataT.STRING, NameT.VALID, false),
-        new TestParams(DataT.BYTES, NameT.VALID, false),
-        new TestParams(DataT.INT32, NameT.VALID, false),
-        new TestParams(DataT.LONG64, NameT.VALID, false),
-        new TestParams(DataT.FLOAT32, NameT.VALID, false),
-        new TestParams(DataT.DOUBLE64, NameT.VALID, false),
-        new TestParams(DataT.BOOLEAN, NameT.VALID, false),
-        new TestParams(DataT.NULL, NameT.VALID, false),
+        new TestSchemaParams(DataT.RECORD,    NameT.VALID, false),
+        new TestSchemaParams(DataT.ENUM,      NameT.VALID, false),
+        new TestSchemaParams(DataT.ARRAY,     NameT.VALID, false),
+        new TestSchemaParams(DataT.MAP,       NameT.VALID, false),
+        new TestSchemaParams(DataT.UNION,     NameT.VALID, false),
+        new TestSchemaParams(DataT.FIXED,     NameT.VALID, false),
+        new TestSchemaParams(DataT.STRING,    NameT.VALID, false),
+        new TestSchemaParams(DataT.BYTES,     NameT.VALID, false),
+        new TestSchemaParams(DataT.INT32,     NameT.VALID, false),
+        new TestSchemaParams(DataT.LONG64,    NameT.VALID, false),
+        new TestSchemaParams(DataT.FLOAT32,   NameT.VALID, false),
+        new TestSchemaParams(DataT.DOUBLE64,  NameT.VALID, false),
+        new TestSchemaParams(DataT.BOOLEAN,   NameT.VALID, false),
+        new TestSchemaParams(DataT.NULL,      NameT.VALID, false),
 
         // Added after jacoco
-        new TestParams(DataT.ERROR, NameT.VALID, false)
+        new TestSchemaParams(DataT.ERROR, NameT.VALID, false)
     );
   }
 
-  private final TestParams params;
+  private final TestSchemaParams params;
 
-  public SchemaValidNamesTest(TestParams params) {
+  public SchemaValidNamesTest(TestSchemaParams params) {
     this.params = params;
   }
 

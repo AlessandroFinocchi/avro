@@ -14,28 +14,28 @@ import static org.apache.avro.SchemaTests.*;
 public class SchemaWOFieldTest {
 
   @Parameterized.Parameters
-  public static Collection<TestParams> getParameters() {
+  public static Collection<TestSchemaParams> getParameters() {
     return Arrays.asList(
-        new TestParams(DataT.RECORD, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.ENUM, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.ARRAY, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.MAP, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        //new TestParams(DataT.UNION, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.FIXED, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.STRING, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.BYTES, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.INT32, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.LONG64, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.FLOAT32, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.DOUBLE64, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.BOOLEAN, DataState.WITHOUT_MANDATORY_FIELDS, true),
-        new TestParams(DataT.NULL, DataState.WITHOUT_MANDATORY_FIELDS, true)
+        new TestSchemaParams(DataT.RECORD,    DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.ENUM,      DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.ARRAY,     DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.MAP,       DataState.WITHOUT_MANDATORY_FIELDS, true),
+        //new TestSchemaParams(DataT.UNION, DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.FIXED,     DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.STRING,  DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.BYTES,     DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.INT32,     DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.LONG64,    DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.FLOAT32,   DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.DOUBLE64,  DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.BOOLEAN,   DataState.WITHOUT_MANDATORY_FIELDS, true),
+        new TestSchemaParams(DataT.NULL,      DataState.WITHOUT_MANDATORY_FIELDS, true)
     );
   }
 
-  private final TestParams params;
+  private final TestSchemaParams params;
 
-  public SchemaWOFieldTest(TestParams params) {
+  public SchemaWOFieldTest(TestSchemaParams params) {
     this.params = params;
   }
 

@@ -8,21 +8,21 @@ import static org.apache.avro.Utils.*;
 
 public class SchemaTests {
 
-  public static class TestParams {
+  public static class TestSchemaParams {
     JsonNode schemaJsonNode;
     Schema.Names schemaNames;
     Schema expectedSchema;
     Class<Exception> expectedException;
 
-    public TestParams(DataT dataT, NameT schemaNames, boolean isExpectedException) {
+    public TestSchemaParams(DataT dataT, NameT schemaNames, boolean isExpectedException) {
       this(dataT, DataState.VALID, schemaNames, isExpectedException);
     }
 
-    public TestParams(DataT dataT, DataState dataState, boolean isExpectedException) {
+    public TestSchemaParams(DataT dataT, DataState dataState, boolean isExpectedException) {
       this(dataT, dataState, NameT.VALID, isExpectedException);
     }
 
-    public TestParams(DataT dataT, DataState dataState, NameT schemaNames, boolean isExpectedException) {
+    public TestSchemaParams(DataT dataT, DataState dataState, NameT schemaNames, boolean isExpectedException) {
       try {
         this.schemaJsonNode = getJsonNode(dataT, dataState);
         this.schemaNames = getNames(schemaNames);
@@ -35,7 +35,7 @@ public class SchemaTests {
 
   }
 
-  public static void testSchema(TestParams params) {
+  public static void testSchema(TestSchemaParams params) {
     JsonNode schemaJsonNode = params.schemaJsonNode;
     Schema.Names schemaNames = params.schemaNames;
     Schema expectedSchema = params.expectedSchema;

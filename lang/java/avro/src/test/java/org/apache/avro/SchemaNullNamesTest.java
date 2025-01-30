@@ -14,31 +14,31 @@ import static org.apache.avro.SchemaTests.*;
 public class SchemaNullNamesTest {
 
   @Parameterized.Parameters
-  public static Collection<TestParams> getParameters() {
+  public static Collection<TestSchemaParams> getParameters() {
     return Arrays.asList(
-        new TestParams(DataT.RECORD, NameT.NULL, true),
-        new TestParams(DataT.ENUM, NameT.NULL, true),
-        new TestParams(DataT.ARRAY, NameT.NULL, true),
-        new TestParams(DataT.MAP, NameT.NULL, true),
-        new TestParams(DataT.UNION, NameT.NULL, true),
-        new TestParams(DataT.FIXED, NameT.NULL, true),
-        new TestParams(DataT.STRING, NameT.NULL, true),
-        new TestParams(DataT.BYTES, NameT.NULL, true),
-        new TestParams(DataT.INT32, NameT.NULL, true),
-        new TestParams(DataT.LONG64, NameT.NULL, true),
-        new TestParams(DataT.FLOAT32, NameT.NULL, true),
-        new TestParams(DataT.DOUBLE64, NameT.NULL, true),
-        new TestParams(DataT.BOOLEAN, NameT.NULL, true),
-        new TestParams(DataT.NULL, NameT.NULL, true),
+        new TestSchemaParams(DataT.RECORD,    NameT.NULL, true),
+        new TestSchemaParams(DataT.ENUM,      NameT.NULL, true),
+        new TestSchemaParams(DataT.ARRAY,     NameT.NULL, true),
+        new TestSchemaParams(DataT.MAP,       NameT.NULL, true),
+        new TestSchemaParams(DataT.UNION,     NameT.NULL, true),
+        new TestSchemaParams(DataT.FIXED,     NameT.NULL, true),
+        new TestSchemaParams(DataT.STRING,    NameT.NULL, true),
+        new TestSchemaParams(DataT.BYTES,     NameT.NULL, true),
+        new TestSchemaParams(DataT.INT32,     NameT.NULL, true),
+        new TestSchemaParams(DataT.LONG64,    NameT.NULL, true),
+        new TestSchemaParams(DataT.FLOAT32,   NameT.NULL, true),
+        new TestSchemaParams(DataT.DOUBLE64,  NameT.NULL, true),
+        new TestSchemaParams(DataT.BOOLEAN,   NameT.NULL, true),
+        new TestSchemaParams(DataT.NULL,      NameT.NULL, true),
 
         // Added after jacoco
-        new TestParams(DataT.ERROR, NameT.NULL, true)
+        new TestSchemaParams(DataT.ERROR, NameT.NULL, true)
     );
   }
 
-  private final TestParams params;
+  private final TestSchemaParams params;
 
-  public SchemaNullNamesTest(TestParams params) {
+  public SchemaNullNamesTest(TestSchemaParams params) {
     this.params = params;
   }
 

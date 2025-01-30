@@ -15,22 +15,22 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import static org.apache.avro.Utils.*;
-import static org.apache.avro.SchemaTests.TestParams;
+import static org.apache.avro.SchemaTests.TestSchemaParams;
 
 @RunWith(Parameterized.class)
 public class SchemaPowermockTest {
 
   @Parameterized.Parameters
-  public static Collection<SchemaTests.TestParams> getParameters() {
+  public static Collection<TestSchemaParams> getParameters() {
     return Collections.singletonList(
         // Added after PIT
-        new TestParams(DataT.POWERMOCK_RECORD, NameT.VALID, false)
+        new TestSchemaParams(DataT.POWERMOCK_RECORD, NameT.VALID, false)
     );
   }
 
-  private final SchemaTests.TestParams params;
+  private final TestSchemaParams params;
 
-  public SchemaPowermockTest(SchemaTests.TestParams params) {
+  public SchemaPowermockTest(TestSchemaParams params) {
     this.params = params;
   }
 

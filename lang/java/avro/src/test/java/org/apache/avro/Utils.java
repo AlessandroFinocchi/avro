@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-
 public class Utils {
   public enum NameT {
     VALID, INVALID, NULL
@@ -266,6 +264,7 @@ public class Utils {
     jsonNode = mapper.readTree(jsonNodeString);
     return jsonNode;
   }
+
   public static Schema getExpectedSchema(DataT dataT) {
     Schema expectedSchema;
     switch (dataT) {
