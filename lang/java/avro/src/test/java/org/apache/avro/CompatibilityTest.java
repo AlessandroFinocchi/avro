@@ -15,17 +15,32 @@ public class CompatibilityTest {
     Schema writer;
     SchemaCompatibilityType expectedCompatibilityType;
     SchemaIncompatibilityType expectedIncompatibilityType;
-    Class<Exception> expectedException;
+    Class<Throwable> expectedException;
+
+    private TestCompatibilityParams(SchemaCompatibilityType expectedCompatibilityType,
+                                    SchemaIncompatibilityType expectedIncompatibilityType,
+                                    boolean isExpectedException) {
+      this.expectedCompatibilityType = expectedCompatibilityType;
+      this.expectedIncompatibilityType = expectedIncompatibilityType;
+      this.expectedException = isExpectedException ? Throwable.class : null;
+    }
 
     public TestCompatibilityParams(DataT readerT, DataT writerT,
                                    SchemaCompatibilityType expectedCompatibilityType,
                                    SchemaIncompatibilityType expectedIncompatibilityType,
                                    boolean isExpectedException) {
+      this(expectedCompatibilityType, expectedIncompatibilityType, isExpectedException);
       this.reader = getExpectedSchema(readerT);
       this.writer = getExpectedSchema(writerT);
-      this.expectedCompatibilityType = expectedCompatibilityType;
-      this.expectedIncompatibilityType = expectedIncompatibilityType;
-      this.expectedException = isExpectedException ? Exception.class : null;
+    }
+
+    public TestCompatibilityParams(Schema reader, Schema writer,
+                                   SchemaCompatibilityType expectedCompatibilityType,
+                                   SchemaIncompatibilityType expectedIncompatibilityType,
+                                   boolean isExpectedException) {
+      this(expectedCompatibilityType, expectedIncompatibilityType, isExpectedException);
+      this.reader = reader;
+      this.writer = writer;
     }
   }
 
@@ -34,9 +49,7 @@ public class CompatibilityTest {
     Schema writerSchema = params.writer;
     SchemaCompatibilityType expectedCompatibilityType = params.expectedCompatibilityType;
     SchemaIncompatibilityType expectedIncompatibilityType = params.expectedIncompatibilityType;
-    Class<Exception> expectedException = params.expectedException;
-
-    checkTestConfiguration(expectedCompatibilityType, expectedIncompatibilityType, expectedException);
+    Class<Throwable> expectedException = params.expectedException;
 
     if (expectedException != null)
       Assert.assertThrows("Expected exception not thrown",
@@ -61,25 +74,6 @@ public class CompatibilityTest {
               actualIncompatibilityTypes.contains(expectedIncompatibilityType));
         }
       } catch (Exception e) { Assert.fail("Unexpected exception"); }
-    }
-  }
-
-  private static void checkTestConfiguration(SchemaCompatibilityType expectedCompatibilityType,
-                                             SchemaIncompatibilityType expectedIncompatibilityType,
-                                             Class<Exception> expectedException) {
-    switch (expectedCompatibilityType) {
-      case COMPATIBLE:
-        if (expectedIncompatibilityType != null || expectedException != null)
-          throw new IllegalArgumentException("Incompatible test configuration");
-        break;
-      case INCOMPATIBLE:
-        if (expectedIncompatibilityType == null && expectedException == null)
-          throw new IllegalArgumentException("Incompatible test configuration");
-        break;
-      case RECURSION_IN_PROGRESS:
-        throw new IllegalArgumentException("Incompatible test configuration");
-      default:
-        throw new IllegalArgumentException("Unknown compatibility type");
     }
   }
 }
