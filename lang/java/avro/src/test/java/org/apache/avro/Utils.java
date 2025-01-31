@@ -265,7 +265,7 @@ public class Utils {
     return jsonNode;
   }
 
-  public static Schema getExpectedSchema(DataT dataT) {
+  public static Schema validSchema(DataT dataT) {
     Schema expectedSchema;
     switch (dataT) {
     case STRING:

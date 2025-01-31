@@ -30,8 +30,8 @@ public class CompatibilityTest {
                                    SchemaIncompatibilityType expectedIncompatibilityType,
                                    boolean isExpectedException) {
       this(expectedCompatibilityType, expectedIncompatibilityType, isExpectedException);
-      this.reader = getExpectedSchema(readerT);
-      this.writer = getExpectedSchema(writerT);
+      this.reader = validSchema(readerT);
+      this.writer = validSchema(writerT);
     }
 
     public TestCompatibilityParams(Schema reader, Schema writer,

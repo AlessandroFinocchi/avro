@@ -26,7 +26,7 @@ public class SchemaTests {
       try {
         this.schemaJsonNode = getJsonNode(dataT, dataState);
         this.schemaNames = getNames(schemaNames);
-        this.expectedSchema = isExpectedException? null : getExpectedSchema(dataT);
+        this.expectedSchema = isExpectedException? null : validSchema(dataT);
         this.expectedException = isExpectedException ? Exception.class : null;
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
