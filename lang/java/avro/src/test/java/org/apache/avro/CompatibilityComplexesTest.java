@@ -42,9 +42,16 @@ public class CompatibilityComplexesTest {
         // Unions
         new TestCompatibilityParams(incompatible(DataT.UNION),  validSchema(DataT.UNION), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
         new TestCompatibilityParams(validSchema(DataT.UNION),   validSchema(DataT.INT32), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
-        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION), INCOMPATIBLE, TYPE_MISMATCH, false)
+        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION), INCOMPATIBLE, TYPE_MISMATCH, false),
+        // Added after Badua
+        new TestCompatibilityParams(validSchema(DataT.STRING),  emptyUnion(),             COMPATIBLE,   null, false)
 
     );
+  }
+
+  private static Schema emptyUnion() {
+    List<Schema> schemas = new ArrayList<>();
+    return Schema.createUnion(schemas);
   }
 
   private static Schema incompatible(DataT type) {

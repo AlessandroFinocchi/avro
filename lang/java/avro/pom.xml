@@ -262,6 +262,7 @@
                 <!--&#45;&#45;add-opens java.base/java.lang.reflect=ALL-UNNAMED-->
                 <!--&#45;&#45;add-opens java.base/sun.reflect=ALL-UNNAMED-->
                 <!--&#45;&#45;illegal-access=permit-->
+                 -da <!-- Disable assertions -->
               </argLine>
               <!--<parallel>none</parallel>-->
               <!--<useSystemClassLoader>false</useSystemClassLoader>-->
