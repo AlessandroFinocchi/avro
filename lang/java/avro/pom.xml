@@ -335,6 +335,8 @@
             <configuration>
               <targetClasses>
                 <param>org.apache.avro.Schema</param>
+                <param>org.apache.avro.SchemaCompatibility</param>
+                <param>org.apache.avro.SchemaCompatibility$ReaderWriterCompatibilityChecker</param>
               </targetClasses>
               <targetTests>
                 <!--<param>org.apache.avro.SchemaValidNamesTest</param>-->
@@ -346,6 +348,10 @@
                 <!--<param>org.apache.avro.SchemaUpgradedTest</param>-->
                 <!--<param>org.apache.avro.SchemaPowermockTest</param>-->
                 <param>org.apache.avro.CompatibilityCompatibleTest</param>
+                <param>org.apache.avro.CompatibilityInvalidTest</param>
+                <param>org.apache.avro.CompatibilityPrimitivesTest</param>
+                <param>org.apache.avro.CompatibilityComplexesTest</param>
+                <param>org.apache.avro.CompatibilityUpgradedTest</param>
               </targetTests>
               <avoidCallsTo>
                 <avoidCallsTo>org.slf4j</avoidCallsTo>

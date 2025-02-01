@@ -72,6 +72,19 @@ public class CompatibilityTest {
 
           Assert.assertTrue("Expected incompatibility type not found",
               actualIncompatibilityTypes.contains(expectedIncompatibilityType));
+
+          for(Incompatibility incompatibility : actualIncompatibilities){
+            try {
+              String referenceToken = incompatibility.getLocation().substring(1);
+              if(referenceToken.matches("-?\\d+")){ // Check if the reference token is a number
+                int referenceTokenNumber = Integer.parseInt(referenceToken);
+                Assert.assertTrue("Reference token is not greater or equal than zero", referenceTokenNumber >= 0);
+              }
+
+            } catch (NumberFormatException e) {
+              Assert.fail("Reference token is not a number");
+            }
+          }
         }
       } catch (Exception e) { Assert.fail("Unexpected exception"); }
     }
