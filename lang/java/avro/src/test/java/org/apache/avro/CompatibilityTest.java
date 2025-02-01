@@ -53,10 +53,10 @@ public class CompatibilityTest {
 
     if (expectedException != null)
       Assert.assertThrows("Expected exception not thrown",
-          expectedException, () -> checkReaderWriterCompatibility(writerSchema, readerSchema));
+          expectedException, () -> checkReaderWriterCompatibility(readerSchema, writerSchema));
     else{
       try {
-        SchemaPairCompatibility actualCompatibility = checkReaderWriterCompatibility(writerSchema, readerSchema);
+        SchemaPairCompatibility actualCompatibility = checkReaderWriterCompatibility(readerSchema, writerSchema);
 
         Assert.assertEquals("Compatibility type mismatch",
             expectedCompatibilityType, actualCompatibility.getType());

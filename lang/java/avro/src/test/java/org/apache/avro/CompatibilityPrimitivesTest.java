@@ -19,27 +19,27 @@ public class CompatibilityPrimitivesTest {
   public static Collection<TestCompatibilityParams> getParameters() {
     return Arrays.asList(
         // Compatible Primitives
-        new TestCompatibilityParams(DataT.INT32,   DataT.LONG64,   COMPATIBLE, null, false),
-        new TestCompatibilityParams(DataT.INT32,   DataT.FLOAT32,  COMPATIBLE, null, false),
-        new TestCompatibilityParams(DataT.INT32,   DataT.DOUBLE64, COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.LONG64,   DataT.INT32,   COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.FLOAT32,   DataT.INT32,  COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.DOUBLE64,   DataT.INT32, COMPATIBLE, null, false),
 
-        new TestCompatibilityParams(DataT.LONG64,  DataT.FLOAT32,  COMPATIBLE, null, false),
-        new TestCompatibilityParams(DataT.LONG64,  DataT.DOUBLE64, COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.FLOAT32,  DataT.LONG64,  COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.DOUBLE64,  DataT.LONG64, COMPATIBLE, null, false),
 
-        new TestCompatibilityParams(DataT.FLOAT32, DataT.DOUBLE64, COMPATIBLE, null, false),
+        new TestCompatibilityParams(DataT.DOUBLE64, DataT.FLOAT32, COMPATIBLE, null, false),
 
         new TestCompatibilityParams(DataT.STRING,  DataT.BYTES,    COMPATIBLE, null, false),
         new TestCompatibilityParams(DataT.BYTES, DataT.STRING,     COMPATIBLE, null, false),
 
         // Incompatible Primitives
-        new TestCompatibilityParams(DataT.DOUBLE64, DataT.INT32,   INCOMPATIBLE, TYPE_MISMATCH, false),
-        new TestCompatibilityParams(DataT.DOUBLE64, DataT.LONG64,  INCOMPATIBLE, TYPE_MISMATCH, false),
-        new TestCompatibilityParams(DataT.DOUBLE64, DataT.FLOAT32, INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.INT32, DataT.DOUBLE64,   INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.LONG64, DataT.DOUBLE64,  INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.FLOAT32, DataT.DOUBLE64, INCOMPATIBLE, TYPE_MISMATCH, false),
 
-        new TestCompatibilityParams(DataT.FLOAT32,  DataT.INT32,   INCOMPATIBLE, TYPE_MISMATCH, false),
-        new TestCompatibilityParams(DataT.FLOAT32,  DataT.LONG64,  INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.INT32,  DataT.FLOAT32,   INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.LONG64,  DataT.FLOAT32,  INCOMPATIBLE, TYPE_MISMATCH, false),
 
-        new TestCompatibilityParams(DataT.LONG64,   DataT.INT32,   INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(DataT.INT32,   DataT.LONG64,   INCOMPATIBLE, TYPE_MISMATCH, false),
 
         new TestCompatibilityParams(DataT.INT32,    DataT.STRING,  INCOMPATIBLE, TYPE_MISMATCH, false),
         new TestCompatibilityParams(DataT.STRING,   DataT.INT32,   INCOMPATIBLE, TYPE_MISMATCH, false)

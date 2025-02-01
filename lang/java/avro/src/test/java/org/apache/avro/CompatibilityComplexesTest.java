@@ -41,8 +41,8 @@ public class CompatibilityComplexesTest {
 
         // Unions
         new TestCompatibilityParams(incompatible(DataT.UNION),  validSchema(DataT.UNION), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
-        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
-        new TestCompatibilityParams(validSchema(DataT.UNION),   validSchema(DataT.INT32), INCOMPATIBLE, TYPE_MISMATCH, false)
+        new TestCompatibilityParams(validSchema(DataT.UNION),   validSchema(DataT.INT32), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
+        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION), INCOMPATIBLE, TYPE_MISMATCH, false)
 
     );
   }
