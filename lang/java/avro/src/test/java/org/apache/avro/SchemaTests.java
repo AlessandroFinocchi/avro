@@ -48,7 +48,9 @@ public class SchemaTests {
         Schema actualSchema = Schema.parse(schemaJsonNode, schemaNames);
 
         Assert.assertEquals(expectedSchema, actualSchema);
-        if(expectedSchema != null) Assert.assertEquals(LogicalTypes.fromSchemaIgnoreInvalid(expectedSchema), actualSchema.getLogicalType());
+        if(expectedSchema != null)
+          Assert.assertEquals(LogicalTypes.fromSchemaIgnoreInvalid(expectedSchema), actualSchema.getLogicalType());
+
       } catch (Exception e) {
         Assert.fail("Unexpected exception");
       }

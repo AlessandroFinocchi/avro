@@ -36,6 +36,7 @@ public class SchemaUpgradedTest {
         new TestSchemaParams(DataT.NO_INT_SIZE_FIXED,     NameT.VALID, true),
 
         // Added after PIT
+        new TestSchemaParams(DataT.RECORD_WITH_RECORD_FIELDS, NameT.VALID, false),
         new TestSchemaParams(DataT.LOGICAL_TYPE_DATE, NameT.VALID, false)
     );
   }

@@ -269,7 +269,7 @@
               <excludes>
                 <exclude>**/SchemaPowermockTest.java</exclude>
                 <!--<exclude>**/Compatibility**Test.java</exclude>-->
-                <exclude>**/Schema**Test.java</exclude>
+                <!--<exclude>**/Schema**Test.java</exclude>-->
               </excludes>
             </configuration>
           </plugin>
@@ -339,14 +339,14 @@
                 <param>org.apache.avro.SchemaCompatibility$ReaderWriterCompatibilityChecker</param>
               </targetClasses>
               <targetTests>
-                <!--<param>org.apache.avro.SchemaValidNamesTest</param>-->
-                <!--<param>org.apache.avro.SchemaInvalidNamesTest</param>-->
-                <!--<param>org.apache.avro.SchemaNullNamesTest</param>-->
-                <!--<param>org.apache.avro.SchemaWOFieldTest</param>-->
-                <!--<param>org.apache.avro.SchemaInvalidFieldTest</param>-->
-                <!--<param>org.apache.avro.SchemaNullTest</param>-->
-                <!--<param>org.apache.avro.SchemaUpgradedTest</param>-->
-                <!--<param>org.apache.avro.SchemaPowermockTest</param>-->
+                <param>org.apache.avro.SchemaValidNamesTest</param>
+                <param>org.apache.avro.SchemaInvalidNamesTest</param>
+                <param>org.apache.avro.SchemaNullNamesTest</param>
+                <param>org.apache.avro.SchemaWOFieldTest</param>
+                <param>org.apache.avro.SchemaInvalidFieldTest</param>
+                <param>org.apache.avro.SchemaNullTest</param>
+                <param>org.apache.avro.SchemaUpgradedTest</param>
+                <param>org.apache.avro.SchemaPowermockTest</param>
                 <param>org.apache.avro.CompatibilityCompatibleTest</param>
                 <param>org.apache.avro.CompatibilityInvalidTest</param>
                 <param>org.apache.avro.CompatibilityPrimitivesTest</param>

@@ -31,7 +31,7 @@ public class Utils {
     ERROR, NO_FIELD_RECORD, NO_ARRAY_FIELD_RECORD, NO_SYMBOLS_ENUM, NO_ARRAY_SYMBOLS_ENUM,
     DEFAULT_VALUE_ENUM, NO_ITEMS_ARRAY, NO_VALUES_MAP, NO_SIZE_FIXED, NO_INT_SIZE_FIXED, NON_TEXTUAL,
     // Added after PIT
-    LOGICAL_TYPE_DATE, POWERMOCK_RECORD,
+    LOGICAL_TYPE_DATE, POWERMOCK_RECORD, RECORD_WITH_RECORD_FIELDS
   }
   public enum DataState {
     VALID, WITHOUT_MANDATORY_FIELDS, INVALID_MANDATORY_FIELD, NULL
@@ -259,6 +259,21 @@ public class Utils {
             "]}";
         break;
 
+      case RECORD_WITH_RECORD_FIELDS:
+        jsonNodeString = "{" +
+            "\"type\":\"record\"," +
+            "\"name\":\"RecordName\"," +
+            "\"namespace\":\"my.namespace\"," +
+            "\"fields\":[{\"name\":\"Value\"," +
+                         "\"type\":{\"type\":\"record\"," +
+                                   "\"name\":\"NestedRecordName\"," +
+                                   "\"fields\":[{\"name\":\"Value\"," +
+                                                 "\"type\":\"string\"}]" +
+                                  "}" +
+                       "}]" +
+            "}";
+        break;
+
       default: throw new IllegalArgumentException();
     }
     jsonNode = mapper.readTree(jsonNodeString);
@@ -268,105 +283,118 @@ public class Utils {
   public static Schema validSchema(DataT dataT) {
     Schema expectedSchema;
     switch (dataT) {
-    case STRING:
-      return Schema.create(Schema.Type.STRING);
+      case STRING:
+        return Schema.create(Schema.Type.STRING);
 
-    case BOOLEAN:
-      return Schema.create(Schema.Type.BOOLEAN);
+      case BOOLEAN:
+        return Schema.create(Schema.Type.BOOLEAN);
 
-    case BYTES:
-      return Schema.create(Schema.Type.BYTES);
+      case BYTES:
+        return Schema.create(Schema.Type.BYTES);
 
-    case INT32:
-      return Schema.create(Schema.Type.INT);
+      case INT32:
+        return Schema.create(Schema.Type.INT);
 
-    case LONG64:
-      return Schema.create(Schema.Type.LONG);
+      case LONG64:
+        return Schema.create(Schema.Type.LONG);
 
-    case FLOAT32:
-      return Schema.create(Schema.Type.FLOAT);
+      case FLOAT32:
+        return Schema.create(Schema.Type.FLOAT);
 
-    case DOUBLE64:
-      return Schema.create(Schema.Type.DOUBLE);
+      case DOUBLE64:
+        return Schema.create(Schema.Type.DOUBLE);
 
-    case ENUM:
-      List<String> enumValues = new ArrayList<>();
-      enumValues.add("SPRING");
-      enumValues.add("SUMMER");
-      enumValues.add("AUTUMN");
-      enumValues.add("WINTER");
-      expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, enumValues);
-      return expectedSchema;
+      case ENUM:
+        List<String> enumValues = new ArrayList<>();
+        enumValues.add("SPRING");
+        enumValues.add("SUMMER");
+        enumValues.add("AUTUMN");
+        enumValues.add("WINTER");
+        expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, enumValues);
+        return expectedSchema;
 
-    case ARRAY:
-      Schema elementType = Schema.create(Schema.Type.STRING);
-      expectedSchema = Schema.createArray(elementType);
-      return expectedSchema;
+      case ARRAY:
+        Schema elementType = Schema.create(Schema.Type.STRING);
+        expectedSchema = Schema.createArray(elementType);
+        return expectedSchema;
 
-    case MAP:
-      Schema valueType = Schema.create(Schema.Type.STRING);
-      expectedSchema = Schema.createMap(valueType);
-      return expectedSchema;
+      case MAP:
+        Schema valueType = Schema.create(Schema.Type.STRING);
+        expectedSchema = Schema.createMap(valueType);
+        return expectedSchema;
 
-    case UNION:
-      Schema firstType = Schema.create(Schema.Type.NULL);
-      Schema secondType = Schema.create(Schema.Type.STRING);
-      List<Schema> schemas = new ArrayList<>();
-      schemas.add(firstType);
-      schemas.add(secondType);
-      expectedSchema = Schema.createUnion(schemas);
-      return expectedSchema;
+      case UNION:
+        Schema firstType = Schema.create(Schema.Type.NULL);
+        Schema secondType = Schema.create(Schema.Type.STRING);
+        List<Schema> schemas = new ArrayList<>();
+        schemas.add(firstType);
+        schemas.add(secondType);
+        expectedSchema = Schema.createUnion(schemas);
+        return expectedSchema;
 
-    case FIXED:
-      expectedSchema = Schema.createFixed("md5", null, VALID_SCHEMA_NAMESPACE, 16);
-      return expectedSchema;
+      case FIXED:
+        expectedSchema = Schema.createFixed("md5", null, VALID_SCHEMA_NAMESPACE, 16);
+        return expectedSchema;
 
-    case RECORD:
-      Schema nestedRecordSchema = Schema.create(Schema.Type.STRING);
-      Schema.Field recordField = new Schema.Field("Value", nestedRecordSchema, null, null);
-      List<Schema.Field> recordFields = new ArrayList<>();
-      recordFields.add(recordField);
-      expectedSchema = Schema.createRecord("RecordName", null, VALID_SCHEMA_NAMESPACE, false, recordFields);
-      expectedSchema.addAlias("RecordAlias");
-      return expectedSchema;
+      case RECORD:
+        Schema nestedRecordSchema = Schema.create(Schema.Type.STRING);
+        Schema.Field recordField = new Schema.Field("Value", nestedRecordSchema, null, null);
+        List<Schema.Field> recordFields = new ArrayList<>();
+        recordFields.add(recordField);
+        expectedSchema = Schema.createRecord("RecordName", null, VALID_SCHEMA_NAMESPACE, false, recordFields);
+        expectedSchema.addAlias("RecordAlias");
+        return expectedSchema;
 
-    case ERROR:
-      Schema nestedErrorSchema = Schema.create(Schema.Type.STRING);
-      Schema.Field errorField = new Schema.Field("Value", nestedErrorSchema, null, null);
-      List<Schema.Field> errorFields = new ArrayList<>();
-      errorFields.add(errorField);
-      expectedSchema = Schema.createRecord("ErrorName", null, VALID_SCHEMA_NAMESPACE, false, errorFields);
-      expectedSchema.addAlias("ErrorName");
-      return expectedSchema;
+      case ERROR:
+        Schema nestedErrorSchema = Schema.create(Schema.Type.STRING);
+        Schema.Field errorField = new Schema.Field("Value", nestedErrorSchema, null, null);
+        List<Schema.Field> errorFields = new ArrayList<>();
+        errorFields.add(errorField);
+        expectedSchema = Schema.createRecord("ErrorName", null, VALID_SCHEMA_NAMESPACE, false, errorFields);
+        expectedSchema.addAlias("ErrorName");
+        return expectedSchema;
 
-    case DEFAULT_VALUE_ENUM:
-      List<String> defEnumValues = new ArrayList<>();
-      defEnumValues.add("SPRING");
-      defEnumValues.add("SUMMER");
-      defEnumValues.add("AUTUMN");
-      defEnumValues.add("WINTER");
-      expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, defEnumValues, "WINTER");
-      return expectedSchema;
+      case DEFAULT_VALUE_ENUM:
+        List<String> defEnumValues = new ArrayList<>();
+        defEnumValues.add("SPRING");
+        defEnumValues.add("SUMMER");
+        defEnumValues.add("AUTUMN");
+        defEnumValues.add("WINTER");
+        expectedSchema = Schema.createEnum("EnumName", "This is an enum schema", VALID_SCHEMA_NAMESPACE, defEnumValues, "WINTER");
+        return expectedSchema;
 
-    case NO_FIELD_RECORD: // It's invalid, it cannot be created
-    case NO_ARRAY_FIELD_RECORD:
-    case NO_SYMBOLS_ENUM:
-    case NO_ARRAY_SYMBOLS_ENUM:
-    case NO_ITEMS_ARRAY:
-    case NO_VALUES_MAP:
-    case NO_SIZE_FIXED:
-    case NO_INT_SIZE_FIXED:
-    case NON_TEXTUAL:
-    case POWERMOCK_RECORD:
-      return null;
+      case NO_FIELD_RECORD: // It's invalid, it cannot be created
+      case NO_ARRAY_FIELD_RECORD:
+      case NO_SYMBOLS_ENUM:
+      case NO_ARRAY_SYMBOLS_ENUM:
+      case NO_ITEMS_ARRAY:
+      case NO_VALUES_MAP:
+      case NO_SIZE_FIXED:
+      case NO_INT_SIZE_FIXED:
+      case NON_TEXTUAL:
+      case POWERMOCK_RECORD:
+        return null;
 
-    case NULL:
-      return Schema.create(Schema.Type.NULL);
+      case NULL:
+        return Schema.create(Schema.Type.NULL);
 
-    case LOGICAL_TYPE_DATE:
-      expectedSchema = Schema.create(Schema.Type.INT);
-      expectedSchema.addProp("logicalType", "date");
-      return expectedSchema;
+      case LOGICAL_TYPE_DATE:
+        expectedSchema = Schema.create(Schema.Type.INT);
+        expectedSchema.addProp("logicalType", "date");
+        return expectedSchema;
+
+      case RECORD_WITH_RECORD_FIELDS:
+        Schema nestedStringSchema = Schema.create(Schema.Type.STRING);
+        Schema.Field nestedStringField = new Schema.Field("Value", nestedStringSchema, null, null);
+        List<Schema.Field> nestedRecordFields = new ArrayList<>();
+        nestedRecordFields.add(nestedStringField);
+        Schema nestedRecord = Schema.createRecord("NestedRecordName", null, VALID_SCHEMA_NAMESPACE, false, nestedRecordFields);
+
+        Schema.Field nestedRecordField = new Schema.Field("Value", nestedRecord, null, null);
+        List<Schema.Field> recordFields2 = new ArrayList<>();
+        recordFields2.add(nestedRecordField);
+        expectedSchema = Schema.createRecord("RecordName", null, VALID_SCHEMA_NAMESPACE, false, recordFields2);
+        return expectedSchema;
     }
 
     throw new IllegalArgumentException();
