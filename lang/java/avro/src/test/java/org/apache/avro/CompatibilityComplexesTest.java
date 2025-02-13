@@ -22,29 +22,29 @@ public class CompatibilityComplexesTest {
   public static Collection<TestCompatibilityParams> getParameters() {
     return Arrays.asList(
         // Arrays
-        new TestCompatibilityParams(incompatible(DataT.ARRAY),  validSchema(DataT.ARRAY), INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.ARRAY),  validSchema(DataT.ARRAY),  INCOMPATIBLE, TYPE_MISMATCH, false),
 
         // Maps
-        new TestCompatibilityParams(incompatible(DataT.MAP),    validSchema(DataT.MAP), INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.MAP),    validSchema(DataT.MAP),    INCOMPATIBLE, TYPE_MISMATCH, false),
 
         // Enums
-        new TestCompatibilityParams(incompatible(DataT.ENUM),   validSchema(DataT.ENUM), INCOMPATIBLE, NAME_MISMATCH, false),
-        new TestCompatibilityParams(incompatible(DataT.ENUM),   validSchema(DataT.ENUM), INCOMPATIBLE, MISSING_ENUM_SYMBOLS, false),
+        new TestCompatibilityParams(incompatible(DataT.ENUM),   validSchema(DataT.ENUM),   INCOMPATIBLE, NAME_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.ENUM),   validSchema(DataT.ENUM),   INCOMPATIBLE, MISSING_ENUM_SYMBOLS, false),
 
         // Fixed
-        new TestCompatibilityParams(incompatible(DataT.FIXED),  validSchema(DataT.FIXED), INCOMPATIBLE, NAME_MISMATCH, false),
-        new TestCompatibilityParams(incompatible(DataT.FIXED),  validSchema(DataT.FIXED), INCOMPATIBLE, FIXED_SIZE_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.FIXED),  validSchema(DataT.FIXED),  INCOMPATIBLE, NAME_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.FIXED),  validSchema(DataT.FIXED),  INCOMPATIBLE, FIXED_SIZE_MISMATCH, false),
 
         // Records
         new TestCompatibilityParams(incompatible(DataT.RECORD), validSchema(DataT.RECORD), INCOMPATIBLE, NAME_MISMATCH, false),
         new TestCompatibilityParams(incompatible(DataT.RECORD), validSchema(DataT.RECORD), INCOMPATIBLE, READER_FIELD_MISSING_DEFAULT_VALUE, false),
 
         // Unions
-        new TestCompatibilityParams(incompatible(DataT.UNION),  validSchema(DataT.UNION), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
-        new TestCompatibilityParams(validSchema(DataT.UNION),   validSchema(DataT.INT32), INCOMPATIBLE, MISSING_UNION_BRANCH, false),
-        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION), INCOMPATIBLE, TYPE_MISMATCH, false),
+        new TestCompatibilityParams(incompatible(DataT.UNION),  validSchema(DataT.UNION),  INCOMPATIBLE, MISSING_UNION_BRANCH, false),
+        new TestCompatibilityParams(validSchema(DataT.UNION),   validSchema(DataT.INT32),  INCOMPATIBLE, MISSING_UNION_BRANCH, false),
+        new TestCompatibilityParams(validSchema(DataT.INT32),   validSchema(DataT.UNION),  INCOMPATIBLE, TYPE_MISMATCH, false),
         // Added after Badua
-        new TestCompatibilityParams(validSchema(DataT.STRING),  emptyUnion(),             COMPATIBLE,   null, false)
+        new TestCompatibilityParams(validSchema(DataT.STRING),  emptyUnion(),              COMPATIBLE,   null, false)
 
     );
   }

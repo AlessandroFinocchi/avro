@@ -5,6 +5,9 @@ clean:
 	mvn clean -f ../
 	mvn clean -f ../jacoco-module
 
+it:
+	mvn verify -P isw2-integration-test
+
 jacoco:
 	mvn verify -P isw2-jacoco-avro-parent -f ../
 

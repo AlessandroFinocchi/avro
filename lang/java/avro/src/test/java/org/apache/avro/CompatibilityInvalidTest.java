@@ -25,9 +25,9 @@ public class CompatibilityInvalidTest {
         new TestCompatibilityParams(validSchema(DataT.INT32), null, INCOMPATIBLE, null, true),
 
         // Invalid Schemas
-        new TestCompatibilityParams(invalidSchema(), invalidSchema(), INCOMPATIBLE, null, true),
-        new TestCompatibilityParams(invalidSchema(), validSchema(DataT.INT32),   INCOMPATIBLE, null, true),
-        new TestCompatibilityParams(validSchema(DataT.INT32),   invalidSchema(), INCOMPATIBLE, null, true)
+        new TestCompatibilityParams(invalidSchema(), invalidSchema(),          INCOMPATIBLE, null, true),
+        new TestCompatibilityParams(invalidSchema(), validSchema(DataT.INT32), INCOMPATIBLE, null, true),
+        new TestCompatibilityParams(validSchema(DataT.INT32), invalidSchema(), INCOMPATIBLE, null, true)
     );
   }
 
